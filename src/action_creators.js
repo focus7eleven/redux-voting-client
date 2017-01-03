@@ -20,9 +20,36 @@ export function setState(state) {
   };
 }
 
+// Prepare stage.
+export function joinGame() {
+  return {
+    meta: {
+      remote: true
+    },
+    type: 'JOIN_GAME',
+  }
+}
+
+export function toggleReady() {
+  return {
+    meta: {
+      remote: true
+    },
+    type: 'TOGGLE_READY'
+  }
+}
+
+export function startGame() {
+  return {
+    type: 'START_GAME'
+  }
+}
+
 export function vote(entry) {
   return {
-    meta: {remote: true},
+    meta: {
+      remote: true
+    },
     type: 'VOTE',
     entry
   };
@@ -30,14 +57,18 @@ export function vote(entry) {
 
 export function next() {
   return {
-    meta: {remote: true},
+    meta: {
+      remote: true
+    },
     type: 'NEXT'
   };
 }
 
 export function restart() {
   return {
-    meta: {remote: true},
+    meta: {
+      remote: true
+    },
     type: 'RESTART'
   };
 }
