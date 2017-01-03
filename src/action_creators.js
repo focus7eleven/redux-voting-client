@@ -41,6 +41,9 @@ export function toggleReady() {
 
 export function startGame() {
   return {
+    meta: {
+      remote: true
+    },
     type: 'START_GAME'
   }
 }

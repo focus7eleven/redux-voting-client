@@ -31,6 +31,15 @@ export const Management = React.createClass({
           </div>
           {readyPlayer.size?<button style={{color: 'black'}} onClick={this.props.startGame}>开始</button>:null}
         </div>
+      case 'PLAYING_STAGE':
+        return <div>
+          <p>目标值为{targetValue}</p>          
+          <div>
+            {readyPlayer.map((player, key) => {
+              return <div key={key}>{player.get('name')}</div>
+            })}
+          </div>
+        </div>
       default:
         return null
     }
