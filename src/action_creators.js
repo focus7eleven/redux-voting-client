@@ -30,12 +30,13 @@ export function joinGame() {
   }
 }
 
-export function toggleReady() {
+export function toggleReady(phone) {
   return {
     meta: {
       remote: true
     },
-    type: 'TOGGLE_READY'
+    type: 'TOGGLE_READY',
+    phone,
   }
 }
 

@@ -30,7 +30,7 @@ export const Prepare = React.createClass({
       <div>
         联系方式：<input style={{color: 'black'}} type="text" value={this.state.phone} onChange={evt=>this.setState({phone: evt.target.value})}/>
       </div>
-      <button style={{color: 'black'}} onClick={this.props.toggleReady}>{viewer.get('isReady')?'取消准备':'准备'}</button>
+      <button style={{color: 'black'}} onClick={this.props.toggleReady.bind(this, this.state.phone)}>{viewer.get('isReady')?'取消准备':'准备'}</button>
     </div>
   }
 });

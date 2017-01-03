@@ -16,6 +16,7 @@ export const Management = React.createClass({
     const {
       stage,
       targetValue,
+      clientId,
     } = this.props
     const readyPlayer = this.props.player.toList().filter(v => v.get('isReady'))
 
@@ -36,7 +37,16 @@ export const Management = React.createClass({
           <p>目标值为{targetValue}</p>          
           <div>
             {readyPlayer.map((player, key) => {
-              return <div key={key}>{player.get('name')}</div>
+              return <div key={key}>
+                {player.get('name')}:
+                <div>
+                  {
+                    player.get('elements').map((ele, key) => <span key={key} style={ele.get('source') === clientId?{color: 'red'}:{}}>
+                      {ele.get('value')}
+                    </span>)
+                  }   
+                </div>
+              </div>
             })}
           </div>
         </div>
@@ -59,6 +69,7 @@ function mapStateToProps(state) {
     stage: state.get('stage'),
     targetValue: state.get('targetValue'),
     player: state.get('player') || Map(),
+    clientId: state.get('clientId'),
   }
 }
 
