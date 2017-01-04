@@ -5,6 +5,8 @@ import {
 } from 'react-redux'
 import * as actionCreators from '../action_creators'
 import PrepareContainer from './Prepare'
+import styles from './Client.scss'
+import Paper from 'material-ui/Paper';
 
 export const Client = React.createClass({
   mixins: [PureRenderMixin],
@@ -16,13 +18,16 @@ export const Client = React.createClass({
       case 'PREPARE_STAGE':
         content = <PrepareContainer></PrepareContainer>
         break
-      default : 
+      default :
         content = null
         break
     }
 
-    return <div>
-      <div>目标值为{this.props.targetValue}</div>
+    return <div className={styles.container}>
+      <div>
+        <Paper className={styles.targetValueContainer} zDepth={3} circle={true} >{this.props.targetValue}</Paper>
+      </div>
+      {/* <div className={styles.targetValue}>目标值为：{this.props.targetValue}</div> */}
       {content}
     </div>;
   }

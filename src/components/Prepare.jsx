@@ -5,6 +5,8 @@ import {
 } from 'react-redux'
 import * as actionCreators from '../action_creators'
 import RaisedButton from 'material-ui/RaisedButton'
+import TextField from 'material-ui/TextField';
+import styles from './Prepare.scss'
 
 export const Prepare = React.createClass({
   mixins: [PureRenderMixin],
@@ -26,11 +28,11 @@ export const Prepare = React.createClass({
 
     if (!viewer) return null
 
-    return <div>
-      <div>我的名字是{viewer.get('name')}</div>
-      <div>
+    return <div className={styles.container}>
+      <div className={styles.name}>我的名字是{viewer.get('name')}</div>
+      {/* <div>
         联系方式：<input style={{color: 'black'}} type="text" value={this.state.phone} onChange={evt=>this.setState({phone: evt.target.value})}/>
-      </div>
+      </div> */}
       <RaisedButton label={viewer.get('isReady')?'取消准备':'准备'} onClick={this.props.toggleReady.bind(this, this.state.phone)}></RaisedButton>
     </div>
   }
