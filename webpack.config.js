@@ -15,7 +15,10 @@ module.exports = {
     }, {
       test: /\.css$/,
       loader: 'style!css!postcss'
-    }]
+    },{
+			test: /\.scss$/,
+			loaders: ["style", "css", "postcss", "sass"]
+		}]
   },
   resolve: {
     extensions: ['', '.js', '.jsx']

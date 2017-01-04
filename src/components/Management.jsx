@@ -7,11 +7,75 @@ import * as actionCreators from '../action_creators';
 import {
   Map,
 } from 'immutable'
+import Chip from 'material-ui/Chip';
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import RaisedButton from 'material-ui/RaisedButton';
+import styles from './Management.scss'
+
+const inlineStyles = {
+  chip: {
+    margin: 4,
+  },
+  button:{
+   margin: 12,
+  },
+  wrapper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+};
 
 export const Management = React.createClass({
   mixins: [PureRenderMixin],
 
   // Render.
+
+  renderPrepareStage(){
+    const {
+      stage,
+      targetValue,
+      clientId,
+    } = this.props
+    const readyPlayer = this.props.player.toList().filter(v => v.get('isReady'))
+    return(
+      <div>
+        <Chip
+          style={inlineStyles.chip}
+        >
+          目标值为{targetValue}
+        </Chip>
+        <div>
+          <Table>
+            <TableHeader
+            displaySelectAll={false}
+            adjustForCheckbox={false}
+            >
+              <TableRow>
+                <TableHeaderColumn>昵称</TableHeaderColumn>
+                <TableHeaderColumn>联系方式</TableHeaderColumn>
+              </TableRow>
+            </TableHeader>
+            <TableBody
+            displayRowCheckbox={false}
+            >
+            {
+              readyPlayer.map( (v,key) => (
+                <TableRow key={key}>
+                  <TableRowColumn>{v.get('name')}</TableRowColumn>
+                  <TableRowColumn>{v.get('phone')}</TableRowColumn>
+                </TableRow>
+              ))
+            }
+            </TableBody>
+          </Table>
+        </div>
+        <div>
+          {readyPlayer.size?<RaisedButton label="Primary" primary={true} style={inlineStyles.button} />:null}
+        </div>
+      </div>
+    )
+  },
+
   renderContent() {
     const {
       stage,
@@ -19,22 +83,12 @@ export const Management = React.createClass({
       clientId,
     } = this.props
     const readyPlayer = this.props.player.toList().filter(v => v.get('isReady'))
-
     switch (stage) {
       case 'PREPARE_STAGE':
-        return <div>
-          <p>目标值为{targetValue}</p>          
-          <div>
-            参与人员：
-            {readyPlayer.map((player, key) => {
-              return <div key={key}>{player.get('name')}</div>
-            })}
-          </div>
-          {readyPlayer.size?<button style={{color: 'black'}} onClick={this.props.startGame}>开始</button>:null}
-        </div>
+        return this.renderPrepareStage()
       case 'PLAYING_STAGE':
         return <div>
-          <p>目标值为{targetValue}</p>          
+          <p>目标值为{targetValue}</p>
           <div>
             {readyPlayer.map((player, key) => {
               return <div key={key}>
@@ -44,7 +98,7 @@ export const Management = React.createClass({
                     player.get('elements').map((ele, key) => <span key={key} style={ele.get('source') === clientId?{color: 'red'}:{}}>
                       {ele.get('value')}
                     </span>)
-                  }   
+                  }
                 </div>
               </div>
             })}
