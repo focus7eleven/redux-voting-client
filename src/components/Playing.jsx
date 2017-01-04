@@ -12,7 +12,7 @@ import _ from 'underscore'
 import styles from './Playing.scss'
 
 const springSetting1 = {
-  stiffness: 180,
+  stiffness: 120,
   damping: 10
 };
 const springSetting2 = {
@@ -32,26 +32,42 @@ function clamp(n, min, max) {
   return Math.max(Math.min(n, max), min);
 }
 
-const allColors = [
-  '#EF767A', '#456990', '#49BEAA', '#49DCB1', '#EEB868', '#EF767A', '#456990',
-  '#49BEAA', '#49DCB1', '#EEB868', '#EF767A',
-];
-const [count, width, height] = [11, 70, 90];
 const [WIDTH, HEIGHT, RADIUS] = [window.innerWidth, 200, 40]
 
 export const Playing = React.createClass({
   mixins: [PureRenderMixin],
 
   getInitialState() {
-    this.updateLayout(['1', '+', '2'])
+    const expression = [{
+      value: '1',
+      source: '哈哈哈'
+    }, {
+      value: '+',
+      source: '哈哈哈'
+    }, {
+      value: '2',
+      source: '哈哈哈'
+    }, {
+      value: '10',
+      source: '哈哈哈'
+    }, {
+      value: '*',
+      source: '哈哈哈'
+    }, {
+      value: '(',
+      source: '哈哈哈'
+    }, {
+      value: ')',
+      source: '哈哈哈'
+    }]
+    this.updateLayout(expression)
 
     return {
       mouse: [0, 0],
       delta: [0, 0], // difference between mouse and circle pos, for dragging
       lastPress: null, // key of the last pressed component
       isPressed: false,
-      order: _.range(count), // index: visual position. value: component key/id
-      expression: ['1', '+', '2']
+      expression,
     }
   },
   componentDidMount() {
@@ -60,39 +76,64 @@ export const Playing = React.createClass({
     window.addEventListener('mousemove', this.handleMouseMove);
     window.addEventListener('mouseup', this.handleMouseUp);
   },
+  componentWillUnmount() {
+    window.removeEventListener('touchmove', this.handleTouchMove);
+    window.removeEventListener('touchend', this.handleMouseUp);
+    window.removeEventListener('mousemove', this.handleMouseMove);
+    window.removeEventListener('mouseup', this.handleMouseUp);
+  },
   updateLayout(expr) {
     const length = expr.length
     const radius = RADIUS * Math.pow(0.9, length)
-    const margin = 5 * Math.pow(1.1, length)
+    const margin = radius * 0.2
     const [ox, oy] = [(WIDTH - (2 * radius + 2 * margin) * length) / 2, (HEIGHT - 2 * radius) / 2]
 
     this._layout = _.map(_.range(expr.length), i => [ox + i * (2 * radius + 2 * margin), oy])
+    this._ox = ox
+    this._oy = oy
     this._radius = radius
     this._margin = margin
+  },
+  calculateElements() {
+    const expr = this.state.expression.map(v => v.value).join(" ")
+
+    let result
+    try {
+      result = eval(expr)
+    } catch (err) {
+      result = 0
+    }
+
+    return result
   },
 
   // Handler
   handleTouchStart(key, pressLocation, e) {
     this.handleMouseDown(key, pressLocation, e.touches[0]);
   },
-
   handleTouchMove(e) {
     e.preventDefault();
     this.handleMouseMove(e.touches[0]);
   },
-
   handleMouseMove({pageX, pageY}) {
-    const {order, lastPress, isPressed, delta: [dx, dy]} = this.state;
+    const {lastPress, isPressed, delta: [dx, dy], expression} = this.state;
     if (isPressed) {
       const mouse = [pageX - dx, pageY - dy];
-      const col = clamp(Math.floor(mouse[0] / width), 0, 2);
-      const row = clamp(Math.floor(mouse[1] / height), 0, Math.floor(count / 3));
-      const index = row * 3 + col;
-      const newOrder = reinsert(order, order.indexOf(lastPress), index);
-      this.setState({mouse: mouse, order: newOrder});
+
+      if (Math.abs(mouse[1] - this._oy) < 40) {
+        const index = clamp(Math.round((mouse[0] - this._layout[0][0]) / (this._radius * 2 + this._margin * 2)), 0, expression.length);
+        const newExpression = reinsert(expression, expression.indexOf(lastPress), index);
+        this.setState({
+          mouse: mouse,
+          expression: newExpression
+        });
+      } else {
+        this.setState({
+          mouse: mouse
+        })
+      }
     }
   },
-
   handleMouseDown(key, [pressX, pressY], {pageX, pageY}) {
     this.setState({
       lastPress: key,
@@ -102,13 +143,13 @@ export const Playing = React.createClass({
     });
   },
   handleMouseUp() {
+    console.log(this.calculateElements())
     this.setState({isPressed: false, delta: [0, 0]});
   },
 
   // Render.
   renderExpression() {
     const {
-      order,
       lastPress,
       isPressed,
       mouse,
@@ -121,14 +162,16 @@ export const Playing = React.createClass({
           let style;
           let x;
           let y;
+          let source;
           const visualPosition = key;
           if (op === lastPress && isPressed) {
             [x, y] = mouse;
+            source = op.source
             style = {
               translateX: x,
               translateY: y,
               scale: spring(1.2, springSetting1),
-              boxShadow: spring((x - (3 * width - 50) / 2) / 15, springSetting1),
+              boxShadow: spring((x - (WIDTH - 50) / 2) / 15, springSetting1),
             };
           } else {
             [x, y] = this._layout[visualPosition];
@@ -137,7 +180,7 @@ export const Playing = React.createClass({
               translateX: spring(x, springSetting2),
               translateY: spring(y, springSetting2),
               scale: spring(1, springSetting1),
-              boxShadow: spring((x - (3 * width - 50) / 2) / 15, springSetting1),
+              boxShadow: spring((x - (WIDTH - 50) / 2) / 15, springSetting1),
             };
           }
 
@@ -149,13 +192,28 @@ export const Playing = React.createClass({
                   onTouchStart={this.handleTouchStart.bind(null, op, [x, y])}
                   className={styles.expressionElement}
                   style={{
-                    backgroundColor: allColors[key],
                     WebkitTransform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
                     transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
                     zIndex: op === lastPress ? 99 : visualPosition,
                     boxShadow: `${boxShadow}px 5px 5px rgba(0,0,0,0.5)`,
+                    lineHeight: `${this._radius * 2}px`,
+                    height: this._radius * 2,
+                    width: this._radius * 2,
+                    marginLeft: this._margin,
+                    marginRight: this._margin,
+                    fontSize: 1 * this._radius,
                   }}
-                />
+                >
+                  {source?<div className={styles.sourceLabel} style={{
+                    fontSize: this._radius * 0.7,
+                    marginLeft: this._radius - 2,
+                    WebkitTransform: `translate3d(-50%, ${-1.6 * this._radius}px, 0)`,
+                    transform: `translate3d(-50%, ${-1.6 * this._radius}px, 0)`,
+                  }}>
+                    {source}
+                  </div>:null}
+                  {op.value}
+                </div>
               }
             </Motion>
           );
