@@ -10,6 +10,8 @@ import {
 } from 'react-motion'
 import _ from 'underscore'
 import styles from './Playing.scss'
+import {Card, CardHeader, CardText} from 'material-ui/Card';
+import TextField from 'material-ui/TextField';
 
 const springSetting1 = {
   stiffness: 120,
@@ -224,12 +226,25 @@ export const Playing = React.createClass({
   render() {
     return <div className={styles.container}>
       {this.renderExpression()}
+      <Card className={styles.socialZone}>
+        <CardHeader
+          title={this.props.viewer.get('name')}
+          actAsExpander={false}
+          showExpandableButton={false}
+        />
+        <CardText expandable={false}>
+        <TextField hintText="描述一下你的物资" floatingLabelText="我的物资描述" floatingLabelFixed={true}/>
+        </CardText>
+      </Card>
     </div>
   }
 })
 
 function mapStateToProps(state) {
+  const clientId = state.get('clientId')
+
   return {
+    viewer: state.getIn(['player', clientId]),
     stage: state.get('stage'),
     targetValue: state.get('targetValue'),
   }
