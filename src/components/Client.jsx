@@ -5,6 +5,8 @@ import {
 } from 'react-redux'
 import * as actionCreators from '../action_creators'
 import PrepareContainer from './Prepare'
+import PlayingContainer from './Playing'
+import AppBar from 'material-ui/AppBar'
 
 export const Client = React.createClass({
   mixins: [PureRenderMixin],
@@ -16,13 +18,19 @@ export const Client = React.createClass({
       case 'PREPARE_STAGE':
         content = <PrepareContainer></PrepareContainer>
         break
+      case 'PLAYING_STAGE':
+        content = <PlayingContainer></PlayingContainer>
+        break
       default : 
         content = null
         break
     }
 
     return <div>
-      <div>目标值为{this.props.targetValue}</div>
+      <AppBar 
+        title={`目标值为 ${this.props.targetValue}`}
+        showMenuIconButton={false}
+      />
       {content}
     </div>;
   }

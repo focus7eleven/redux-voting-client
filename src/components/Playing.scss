@@ -1,0 +1,23 @@
+:local(.container) {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+:local(.expressionPanel) {
+	width: 100%;	
+	height: 200px;
+	position: relative;
+
+	:local(.expressionElement) {
+		background-color: rgb(238, 184, 104);
+		transform: translate3d(0px, 0px, 0px) scale(1);
+		z-index: 99;
+		box-shadow: rgba(0, 0, 0, 0.498039) -5.333333333333333px 5px 5px;		
+		position: absolute;
+		border: 1px solid black;
+		border-radius: 99px;
+		width: 50px;
+		height: 50px;
+	}
+}

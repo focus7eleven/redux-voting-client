@@ -13,6 +13,8 @@ import {
 } from 'material-ui/List'
 import Subheader from 'material-ui/Subheader'
 import styles from './Management.scss'
+import DeleteIcon from 'material-ui/svg-icons/action/delete'
+
 
 export const Management = React.createClass({
   mixins: [PureRenderMixin],
@@ -39,25 +41,20 @@ export const Management = React.createClass({
           {readyPlayer.size?<button style={{color: 'black'}} onClick={this.props.startGame}>开始</button>:null}
         </div>
       case 'PLAYING_STAGE':
+        console.log(this.props.player.toJS())
         return <div className={styles.playingStage}>
           <List className={styles.tipsList}>
-            <Subheader>线索表</Subheader>
-            <ListItem
-              primaryText="Profile photo"
-              secondaryText="Change your Google+ profile photoChange your Google+ profile photoChange your Google+ profile photo" 
+            <Subheader style={{marginBottom: 10}}>线索表</Subheader>
+            {readyPlayer.map((player, key) => <ListItem
+              key={key}
+              primaryText={player.get('name')}
+              secondaryText={player.get('tip') || "未填线索"}
+              rightIcon={<DeleteIcon/>}
               innerDivStyle={{
                 marginTop: -15,
                 marginBottom: -15
               }}
-            />
-            <ListItem
-              primaryText="Profile photo"
-              secondaryText="Change your Google+ profile photoChange your Google+ profile photoChange your Google+ profile photo" 
-              innerDivStyle={{
-                marginTop: -15,
-                marginBottom: -15
-              }}
-            />
+            />)}
           </List>
 
           {/*<div>
