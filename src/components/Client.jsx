@@ -1,9 +1,9 @@
-import React from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React from 'react'
+import PureRenderMixin from 'react-addons-pure-render-mixin'
 import {
   connect
-} from 'react-redux';
-import * as actionCreators from '../action_creators';
+} from 'react-redux'
+import * as actionCreators from '../action_creators'
 import PrepareContainer from './Prepare'
 
 export const Client = React.createClass({

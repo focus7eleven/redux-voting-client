@@ -1,12 +1,18 @@
-import React from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React from 'react'
+import PureRenderMixin from 'react-addons-pure-render-mixin'
 import {
   connect
-} from 'react-redux';
-import * as actionCreators from '../action_creators';
+} from 'react-redux'
+import * as actionCreators from '../action_creators'
 import {
   Map,
 } from 'immutable'
+import {
+  List,
+  ListItem
+} from 'material-ui/List'
+import Subheader from 'material-ui/Subheader'
+import styles from './Management.scss'
 
 export const Management = React.createClass({
   mixins: [PureRenderMixin],
@@ -33,9 +39,32 @@ export const Management = React.createClass({
           {readyPlayer.size?<button style={{color: 'black'}} onClick={this.props.startGame}>开始</button>:null}
         </div>
       case 'PLAYING_STAGE':
-        return <div>
-          <p>目标值为{targetValue}</p>          
-          <div>
+        return <div className={styles.playingStage}>
+          <List className={styles.tipsList}>
+            <Subheader>线索表</Subheader>
+            <ListItem
+              primaryText="Profile photo"
+              secondaryText="Change your Google+ profile photo" 
+            />
+            <ListItem
+              primaryText="Profile photo"
+              secondaryText="Change your Google+ profile photo" 
+            />
+            <ListItem
+              primaryText="Profile photo"
+              secondaryText="Change your Google+ profile photo" 
+            />
+            <ListItem
+              primaryText="Profile photo"
+              secondaryText="Change your Google+ profile photo" 
+            />
+            <ListItem
+              primaryText="Profile photo"
+              secondaryText="Change your Google+ profile photo" 
+            />
+          </List>
+
+          {/*<div>
             {readyPlayer.map((player, key) => {
               return <div key={key}>
                 {player.get('name')}:
@@ -48,7 +77,7 @@ export const Management = React.createClass({
                 </div>
               </div>
             })}
-          </div>
+          </div>*/}
         </div>
       default:
         return null
@@ -57,9 +86,9 @@ export const Management = React.createClass({
   render() {
     return <div className="results">
       {this.renderContent()}
-      <div className="management">
+      {/*<div className="management">
         <button>准备阶段</button>
-      </div>
+      </div>*/}
     </div>;
   }
 });
