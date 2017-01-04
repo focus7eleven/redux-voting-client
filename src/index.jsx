@@ -14,9 +14,6 @@ import {VotingContainer} from './components/Voting'
 import {ResultsContainer} from './components/Results'
 import ManagementContainer from './components/Management'
 import ClientContainer from './components/Client'
-import injectTapEventPlugin from 'react-tap-event-plugin'
-
-injectTapEventPlugin()
 
 require('./style.css');
 const socket = io(`${location.protocol}//${location.hostname}:8090`);

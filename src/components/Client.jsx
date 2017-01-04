@@ -8,6 +8,8 @@ import PrepareContainer from './Prepare'
 import styles from './Client.scss'
 import Paper from 'material-ui/Paper';
 import Divider from 'material-ui/Divider';
+import PlayingContainer from './Playing'
+import AppBar from 'material-ui/AppBar'
 
 export const Client = React.createClass({
   mixins: [PureRenderMixin],
@@ -18,6 +20,9 @@ export const Client = React.createClass({
     switch (this.props.stage) {
       case 'PREPARE_STAGE':
         content = <PrepareContainer></PrepareContainer>
+        break
+      case 'PLAYING_STAGE':
+        content = <PlayingContainer></PlayingContainer>
         break
       default :
         content = null
@@ -38,10 +43,19 @@ export const Client = React.createClass({
           <span>{this.props.targetValue}</span>
           <span>目标值</span>
         </Paper>
+        {
+          this.props.stage == 'PLAYING_STAGE' ?
+          <Paper className={styles.targetValueContainer} zDepth={3} circle={true}>
+            <span>{this.props.targetValue}</span>
+            <span>计算值</span>
+          </Paper>
+          :
+          null
+        }
       </div>
       {/* <div className={styles.targetValue}>目标值为：{this.props.targetValue}</div> */}
       {content}
-      <div className={styles.footer}>做一个有思想有远见的人</div>
+      {/* <div className={styles.footer}>做一个有思想有远见的人</div> */}
     </div>;
   }
 });

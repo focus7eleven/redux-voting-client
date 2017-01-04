@@ -1,3 +1,6 @@
+$PAPER_SIZE: 100vw * 0.35;
+$PAPER_MAX_SIZE: 100vh * 0.30;
+
 .container{
   width: 100%;
   height: 100%;
@@ -5,14 +8,12 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding-top: 20px;
+  padding-top: 10px;
   padding-bottom: 10px;
 
   >div:first-child{
     width: 100%;
-    height: 8%;
-    max-height: 40px;
-    min-height: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     background-color: black;
@@ -29,24 +30,23 @@
     width: 100%;
     height: 35%;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-around;
     align-items: center;
     flex-shrink: 0;
   }
 
   >div:nth-child(3){
-    height: 57%;
+    height: calc( 65% - 30px );
     flex-shrink: 0;
-    padding-left: 30px;
-    padding-right: 30px;
   }
 }
 
 .targetValueContainer{
-  height: 150px;
-  width: 150px;
-  margin: 30px;
+  height: $PAPER_SIZE;
+  width: $PAPER_SIZE;
+  max-width: $PAPER_MAX_SIZE;
+  max-height: $PAPER_MAX_SIZE;
   text-align: center;
   display: inline-flex;
   justify-content: center;

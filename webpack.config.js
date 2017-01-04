@@ -42,5 +42,6 @@ module.exports = {
   ],
   postcss: function () {
     return [autoprefixer];
-  }
+  },
+  devtool: 'source-map'
 };
