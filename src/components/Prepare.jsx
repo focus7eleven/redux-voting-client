@@ -1,9 +1,10 @@
-import React from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React from 'react'
+import PureRenderMixin from 'react-addons-pure-render-mixin'
 import {
   connect
-} from 'react-redux';
-import * as actionCreators from '../action_creators';
+} from 'react-redux'
+import * as actionCreators from '../action_creators'
+import RaisedButton from 'material-ui/RaisedButton'
 
 export const Prepare = React.createClass({
   mixins: [PureRenderMixin],
@@ -30,7 +31,7 @@ export const Prepare = React.createClass({
       <div>
         联系方式：<input style={{color: 'black'}} type="text" value={this.state.phone} onChange={evt=>this.setState({phone: evt.target.value})}/>
       </div>
-      <button style={{color: 'black'}} onClick={this.props.toggleReady.bind(this, this.state.phone)}>{viewer.get('isReady')?'取消准备':'准备'}</button>
+      <RaisedButton label={viewer.get('isReady')?'取消准备':'准备'} onClick={this.props.toggleReady.bind(this, this.state.phone)}></RaisedButton>
     </div>
   }
 });

@@ -1,19 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {Router, Route, hashHistory} from 'react-router';
-import {createStore, applyMiddleware} from 'redux';
-import {Provider} from 'react-redux';
-import io from 'socket.io-client';
-import reducer from './reducer';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {Router, Route, hashHistory} from 'react-router'
+import {createStore, applyMiddleware} from 'redux'
+import {Provider} from 'react-redux'
+import io from 'socket.io-client'
+import reducer from './reducer'
 import createLogger from 'redux-logger'
-import {setClientId, setState, setConnectionState} from './action_creators';
-import remoteActionMiddleware from './remote_action_middleware';
-import getClientId from './client_id';
-import App from './components/App';
-import {VotingContainer} from './components/Voting';
-import {ResultsContainer} from './components/Results';
+import {setClientId, setState, setConnectionState} from './action_creators'
+import remoteActionMiddleware from './remote_action_middleware'
+import getClientId from './client_id'
+import App from './components/App'
+import {VotingContainer} from './components/Voting'
+import {ResultsContainer} from './components/Results'
 import ManagementContainer from './components/Management'
 import ClientContainer from './components/Client'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+
+injectTapEventPlugin()
 
 require('./style.css');
 const socket = io(`${location.protocol}//${location.hostname}:8090`);

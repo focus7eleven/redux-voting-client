@@ -1,11 +1,14 @@
-import React from 'react';
-import {ConnectionStateContainer} from './ConnectionState';
+import React from 'react'
+import {ConnectionStateContainer} from './ConnectionState'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 export default React.createClass({
   render: function() {
-    return <div>
-      <ConnectionStateContainer />
-      {this.props.children}
-    </div>
+    return <MuiThemeProvider>
+	    <div>
+			<ConnectionStateContainer />
+			{this.props.children}
+	    </div>
+	</MuiThemeProvider>
   }
 });
