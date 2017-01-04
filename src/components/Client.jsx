@@ -7,6 +7,7 @@ import * as actionCreators from '../action_creators'
 import PrepareContainer from './Prepare'
 import styles from './Client.scss'
 import Paper from 'material-ui/Paper';
+import Divider from 'material-ui/Divider';
 
 export const Client = React.createClass({
   mixins: [PureRenderMixin],
@@ -25,10 +26,22 @@ export const Client = React.createClass({
 
     return <div className={styles.container}>
       <div>
-        <Paper className={styles.targetValueContainer} zDepth={3} circle={true} >{this.props.targetValue}</Paper>
+        <svg fill="#ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/>
+            <path d="M0 0h24v24H0z" fill="none"/>
+        </svg>
+        <marquee className={styles.notification} behavior="scroll" direction="left">长痔疮的东哥时至运来，获得了【特典】皮肤，真是羡煞旁人！</marquee>
+        {/* <span>长痔疮的东哥时至运来，获得了【特典】皮肤，真是羡煞旁人！</span> */}
+      </div>
+      <div>
+        <Paper className={styles.targetValueContainer} zDepth={3} circle={true}>
+          <span>{this.props.targetValue}</span>
+          <span>目标值</span>
+        </Paper>
       </div>
       {/* <div className={styles.targetValue}>目标值为：{this.props.targetValue}</div> */}
       {content}
+      <div className={styles.footer}>做一个有思想有远见的人</div>
     </div>;
   }
 });

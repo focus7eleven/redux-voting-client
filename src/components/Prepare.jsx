@@ -23,17 +23,18 @@ export const Prepare = React.createClass({
   // Render.
   render() {
     const {
-      viewer
+      viewer,
+      targetValue,
     } = this.props
 
     if (!viewer) return null
 
     return <div className={styles.container}>
-      <div className={styles.name}>我的名字是{viewer.get('name')}</div>
+      <div className={styles.name}>欢迎你：{viewer.get('name')}</div>
       {/* <div>
         联系方式：<input style={{color: 'black'}} type="text" value={this.state.phone} onChange={evt=>this.setState({phone: evt.target.value})}/>
       </div> */}
-      <RaisedButton label={viewer.get('isReady')?'取消准备':'准备'} onClick={this.props.toggleReady.bind(this, this.state.phone)}></RaisedButton>
+      <RaisedButton fullWidth={true} primary={true} label={viewer.get('isReady')?'取消准备':'准备'} onClick={this.props.toggleReady.bind(this, this.state.phone)}></RaisedButton>
     </div>
   }
 });
@@ -42,7 +43,8 @@ function mapStateToProps(state) {
   const clientId = state.get('clientId')
 
   return {
-    viewer: state.getIn(['player', clientId])
+    viewer: state.getIn(['player', clientId]),
+    targetValue: state.get('targetValue'),
   }
 }
 
