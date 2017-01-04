@@ -44,23 +44,19 @@ export const Management = React.createClass({
             <Subheader>线索表</Subheader>
             <ListItem
               primaryText="Profile photo"
-              secondaryText="Change your Google+ profile photo" 
+              secondaryText="Change your Google+ profile photoChange your Google+ profile photoChange your Google+ profile photo" 
+              innerDivStyle={{
+                marginTop: -15,
+                marginBottom: -15
+              }}
             />
             <ListItem
               primaryText="Profile photo"
-              secondaryText="Change your Google+ profile photo" 
-            />
-            <ListItem
-              primaryText="Profile photo"
-              secondaryText="Change your Google+ profile photo" 
-            />
-            <ListItem
-              primaryText="Profile photo"
-              secondaryText="Change your Google+ profile photo" 
-            />
-            <ListItem
-              primaryText="Profile photo"
-              secondaryText="Change your Google+ profile photo" 
+              secondaryText="Change your Google+ profile photoChange your Google+ profile photoChange your Google+ profile photo" 
+              innerDivStyle={{
+                marginTop: -15,
+                marginBottom: -15
+              }}
             />
           </List>
 
