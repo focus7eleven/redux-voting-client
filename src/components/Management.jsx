@@ -203,26 +203,17 @@ export const Management = React.createClass({
       <div className={styles.playingStage}>
         <List className={styles.tipsList}>
           <Subheader>线索表</Subheader>
-          <ListItem
-            primaryText="Profile photo"
-            secondaryText="Change your Google+ profile photo"
-          />
-          <ListItem
-            primaryText="Profile photo"
-            secondaryText="Change your Google+ profile photo"
-          />
-          <ListItem
-            primaryText="Profile photo"
-            secondaryText="Change your Google+ profile photo"
-          />
-          <ListItem
-            primaryText="Profile photo"
-            secondaryText="Change your Google+ profile photo"
-          />
-          <ListItem
-            primaryText="Profile photo"
-            secondaryText="Change your Google+ profile photo"
-          />
+          {
+            readyPlayer.map((player, key) => {
+              const originalElement = player.get('elements').find(v => !!v.get('tip'))
+
+              return <ListItem
+                key={key}
+                primaryText={originalElement.get('code')}
+                secondaryText={originalElement.get('tip')}
+              />
+            })
+          }
         </List>
 
         {/*<div>

@@ -14,11 +14,6 @@ export const Prepare = React.createClass({
   componentDidMount() {
     this.props.joinGame()
   },
-  getInitialState() {
-    return {
-      phone: '',
-    }
-  },
 
   // Render.
   render() {
@@ -31,10 +26,7 @@ export const Prepare = React.createClass({
 
     return <div className={styles.container}>
       <div className={styles.name}>欢迎你：{viewer.get('name')}</div>
-      {/* <div>
-        联系方式：<input style={{color: 'black'}} type="text" value={this.state.phone} onChange={evt=>this.setState({phone: evt.target.value})}/>
-      </div> */}
-      <RaisedButton fullWidth={true} primary={true} label={viewer.get('isReady')?'取消准备':'准备'} onClick={this.props.toggleReady.bind(this, this.state.phone)}></RaisedButton>
+      <RaisedButton fullWidth={true} primary={true} label={viewer.get('isReady')?'取消准备':'准备'} onClick={this.props.toggleReady}></RaisedButton>
     </div>
   }
 });

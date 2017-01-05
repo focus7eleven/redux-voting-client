@@ -15,16 +15,15 @@ export const Client = React.createClass({
   mixins: [PureRenderMixin],
 
   calculateElementsValue() {
-    const expr = this.props.viewer.get('elements').map(v => v.get('value')).join(" ")
-
     let result
     try {
+      const expr = this.props.viewer.get('elements').map(v => v.get('value')).join(" ")
       result = eval(expr)
     } catch (err) {
       result = '-'
     }
 
-    return result 
+    return result
   },
 
   // Render.

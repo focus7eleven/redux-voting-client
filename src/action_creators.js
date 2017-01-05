@@ -30,13 +30,12 @@ export function joinGame() {
   }
 }
 
-export function toggleReady(phone) {
+export function toggleReady() {
   return {
     meta: {
       remote: true
     },
     type: 'TOGGLE_READY',
-    phone,
   }
 }
 
@@ -57,6 +56,26 @@ export function resortElements(newElements) {
     },
     type: 'RESORT_ELEMENTS',
     newElements,
+  }
+}
+
+export function addAnotherElement(code) {
+  return {
+    meta: {
+      remote: true
+    },
+    type: 'ADD_ANOTHER_ELEMENT',
+    code,
+  }
+}
+
+export function deleteElement(code) {
+  return {
+    meta: {
+      remote: true,
+    },
+    type: 'DELETE_ELEMENT',
+    code,
   }
 }
 

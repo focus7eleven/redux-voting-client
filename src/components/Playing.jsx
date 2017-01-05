@@ -38,7 +38,7 @@ function clamp(n, min, max) {
   return Math.max(Math.min(n, max), min);
 }
 
-const [WIDTH, HEIGHT, RADIUS] = [window.innerWidth, 200, 40]
+const [WIDTH, HEIGHT, RADIUS, DELETE_LIMIT] = [window.innerWidth, 200, 40, 50]
 
 export const Playing = React.createClass({
   propTypes: {
@@ -54,6 +54,13 @@ export const Playing = React.createClass({
       delta: [0, 0], // difference between mouse and circle pos, for dragging
       lastPress: null, // key of the last pressed component
       isPressed: false,
+
+      inputCodeValue: '',
+    }
+  },
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.viewer.get('elements').size !== this.props.viewer.get('elements').size) {
+      this.updateLayout(nextProps.viewer.get('elements'))
     }
   },
   componentDidMount() {
@@ -97,7 +104,7 @@ export const Playing = React.createClass({
       const mouse = [pageX - dx, pageY - dy];
 
       if (Math.abs(mouse[1] - this._oy) < 40) {
-        const to = clamp(Math.round((mouse[0] - this._layout[0][0]) / (this._radius * 2 + this._margin * 2)), 0, elements.size);
+        const to = clamp(Math.round((mouse[0] - this._layout[0][0]) / (this._radius * 2 + this._margin * 2)), 0, elements.size - 1);
         const from = elements.findIndex(v => v.get('code') === lastPress)
         if (from !== to) {
           const newElements = reinsert(elements, from, to);
@@ -119,7 +126,22 @@ export const Playing = React.createClass({
     });
   },
   handleMouseUp() {
-    this.setState({isPressed: false, delta: [0, 0]});
+    if (this.state.isPressed && Math.abs(this.state.mouse[1] - this._oy) > DELETE_LIMIT) {
+      this.props.deleteElement(this.state.lastPress)
+    }
+
+    this.setState({isPressed: false, delta: [0, 0]})
+  },
+  handleChangeCodeInput(evt) {
+    this.setState({
+      inputCodeValue: evt.target.value,
+    })
+  },
+  handleAddElement() {
+    this.props.addAnotherElement(this.state.inputCodeValue)
+    this.setState({
+      inputCodeValue: '',
+    })
   },
 
   // Render.
@@ -163,8 +185,8 @@ export const Playing = React.createClass({
             <Motion key={op.get('code')} style={style}>
               {({translateX, translateY, scale, boxShadow}) =>
                 <div
-                  onMouseDown={this.handleMouseDown.bind(null, op, [x, y])}
-                  onTouchStart={this.handleTouchStart.bind(null, op, [x, y])}
+                  onMouseDown={(evt)=>this.handleMouseDown(op, [x, y], evt)}
+                  onTouchStart={(evt)=>this.handleTouchStart(op, [x, y], evt)}
                   className={styles.expressionElement}
                   style={{
                     WebkitTransform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
@@ -179,14 +201,6 @@ export const Playing = React.createClass({
                     fontSize: 1 * this._radius,
                   }}
                 >
-                  {sourceName?<div className={styles.sourceLabel} style={{
-                    fontSize: this._radius * 0.7,
-                    marginLeft: this._radius - 2,
-                    WebkitTransform: `translate3d(-50%, ${-1.6 * this._radius}px, 0)`,
-                    transform: `translate3d(-50%, ${-1.6 * this._radius}px, 0)`,
-                  }}>
-                    {sourceName}
-                  </div>:null}
                   {op.get('value')}
                 </div>
               }
@@ -197,19 +211,25 @@ export const Playing = React.createClass({
     );
   },
   render() {
+    const {
+      viewer
+    } = this.props
+    const originalElement = viewer.get('elements').find(v => !!v.get('tip'))
+
     return <div className={styles.container}>
       {this.renderExpression()}
-      <div className={styles.operationZone}>
+
+      {/*<div className={styles.operationZone}>
         <FloatingActionButton >
           <ContentRemove />
         </FloatingActionButton>
-      </div>
+      </div>*/}
       <Paper className={styles.socialZone}>
-        <span>123</span>
+        <span>{originalElement.get('code')}</span>
         <div className={styles.inputArea}>
-          <TextField className={styles.inputField} hintStyle={{width: "100%",textAlign: "center"}} hintText="在这输入他人的物资代码" />
+          <TextField className={styles.inputField} hintStyle={{width: "100%",textAlign: "center"}} hintText="在这输入他人的物资代码" value={this.state.inputCodeValue} onChange={this.handleChangeCodeInput}/>
           <FloatingActionButton mini={true} >
-            <ContentAdd />
+            <ContentAdd onClick={this.handleAddElement}/>
           </FloatingActionButton>
         </div>
       </Paper>

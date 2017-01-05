@@ -3,10 +3,11 @@ var autoprefixer = require('autoprefixer');
 
 module.exports = {
   entry: [
-    'webpack-dev-server/client?http://0.0.0.0:8080',
+    'webpack-dev-server/client?http://0.0.0.0:8081',
     'webpack/hot/only-dev-server',
     './src/index.jsx'
   ],
+  debug: true,
   module: {
     loaders: [{
       test: /\.jsx?$/,
@@ -40,7 +41,7 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin()
   ],
-  postcss: function () {
+  postcss: function() {
     return [autoprefixer];
   },
   devtool: 'source-map'
