@@ -11,7 +11,11 @@ import {
 import _ from 'underscore'
 import styles from './Playing.scss'
 import {Card, CardHeader, CardText} from 'material-ui/Card';
+import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import ContentRemove from 'material-ui/svg-icons/content/remove';
 
 const springSetting1 = {
   stiffness: 120,
@@ -195,16 +199,20 @@ export const Playing = React.createClass({
   render() {
     return <div className={styles.container}>
       {this.renderExpression()}
-      <Card className={styles.socialZone}>
-        <CardHeader
-          title={this.props.viewer.get('name')}
-          actAsExpander={false}
-          showExpandableButton={false}
-        />
-        <CardText expandable={false}>
-        <TextField hintText="描述一下你的物资" floatingLabelText="我的物资描述" floatingLabelFixed={true}/>
-        </CardText>
-      </Card>
+      <div className={styles.operationZone}>
+        <FloatingActionButton >
+          <ContentRemove />
+        </FloatingActionButton>
+      </div>
+      <Paper className={styles.socialZone}>
+        <span>123</span>
+        <div className={styles.inputArea}>
+          <TextField className={styles.inputField} hintStyle={{width: "100%",textAlign: "center"}} hintText="在这输入他人的物资代码" />
+          <FloatingActionButton mini={true} >
+            <ContentAdd />
+          </FloatingActionButton>
+        </div>
+      </Paper>
     </div>
   }
 })
