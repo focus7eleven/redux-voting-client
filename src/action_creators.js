@@ -40,12 +40,23 @@ export function toggleReady(phone) {
   }
 }
 
+// Playing stage.
 export function startGame() {
   return {
     meta: {
       remote: true
     },
     type: 'START_GAME'
+  }
+}
+
+export function resortElements(newElements) {
+  return {
+    meta: {
+      remote: true
+    },
+    type: 'RESORT_ELEMENTS',
+    newElements,
   }
 }
 

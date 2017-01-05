@@ -14,6 +14,19 @@ import AppBar from 'material-ui/AppBar'
 export const Client = React.createClass({
   mixins: [PureRenderMixin],
 
+  calculateElementsValue() {
+    const expr = this.props.viewer.get('elements').map(v => v.get('value')).join(" ")
+
+    let result
+    try {
+      result = eval(expr)
+    } catch (err) {
+      result = '-'
+    }
+
+    return result 
+  },
+
   // Render.
   render() {
     let content
@@ -22,7 +35,7 @@ export const Client = React.createClass({
         content = <PrepareContainer></PrepareContainer>
         break
       case 'PLAYING_STAGE':
-        content = <PlayingContainer></PlayingContainer>
+        content = <PlayingContainer viewer={this.props.viewer}></PlayingContainer>
         break
       default :
         content = null
@@ -36,18 +49,17 @@ export const Client = React.createClass({
             <path d="M0 0h24v24H0z" fill="none"/>
         </svg>
         <marquee className={styles.notification} behavior="scroll" direction="left">长痔疮的东哥时至运来，获得了【特典】皮肤，真是羡煞旁人！</marquee>
-        {/* <span>长痔疮的东哥时至运来，获得了【特典】皮肤，真是羡煞旁人！</span> */}
       </div>
       <div>
         <Paper className={styles.targetValueContainer} zDepth={3} circle={true}>
           <span>{this.props.targetValue}</span>
-          <span>目标值</span>
+          <span>目标</span>
         </Paper>
         {
           this.props.stage == 'PLAYING_STAGE' ?
           <Paper className={styles.targetValueContainer} zDepth={3} circle={true}>
-            <span>{this.props.targetValue}</span>
-            <span>计算值</span>
+            <span>{this.calculateElementsValue()}</span>
+            <span>当前</span>
           </Paper>
           :
           null
@@ -61,7 +73,10 @@ export const Client = React.createClass({
 });
 
 function mapStateToProps(state) {
+  const clientId = state.get('clientId')
+
   return {
+    viewer: state.getIn(['player', clientId]),
     stage: state.get('stage'),
     targetValue: state.get('targetValue'),
   }

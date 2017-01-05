@@ -23,11 +23,11 @@ const springSetting2 = {
 };
 
 function reinsert(arr, from, to) {
-  const _arr = arr.slice(0);
-  const val = _arr[from];
-  _arr.splice(from, 1);
-  _arr.splice(to, 0, val);
-  return _arr;
+  arr = arr.slice(0);
+  const val = arr.get(from);
+  arr = arr.splice(from, 1);
+  arr = arr.splice(to, 0, val);
+  return arr;
 }
 
 function clamp(n, min, max) {
@@ -37,39 +37,19 @@ function clamp(n, min, max) {
 const [WIDTH, HEIGHT, RADIUS] = [window.innerWidth, 200, 40]
 
 export const Playing = React.createClass({
+  propTypes: {
+    viewer: React.PropTypes.object,
+  },
   mixins: [PureRenderMixin],
 
   getInitialState() {
-    const expression = [{
-      value: '1',
-      source: '哈哈哈'
-    }, {
-      value: '+',
-      source: '哈哈哈'
-    }, {
-      value: '2',
-      source: '哈哈哈'
-    }, {
-      value: '10',
-      source: '哈哈哈'
-    }, {
-      value: '*',
-      source: '哈哈哈'
-    }, {
-      value: '(',
-      source: '哈哈哈'
-    }, {
-      value: ')',
-      source: '哈哈哈'
-    }]
-    this.updateLayout(expression)
+    this.updateLayout(this.props.viewer.get('elements'))
 
     return {
       mouse: [0, 0],
       delta: [0, 0], // difference between mouse and circle pos, for dragging
       lastPress: null, // key of the last pressed component
       isPressed: false,
-      expression,
     }
   },
   componentDidMount() {
@@ -85,28 +65,16 @@ export const Playing = React.createClass({
     window.removeEventListener('mouseup', this.handleMouseUp);
   },
   updateLayout(expr) {
-    const length = expr.length
+    const length = expr.size
     const radius = RADIUS * Math.pow(0.9, length)
     const margin = radius * 0.2
     const [ox, oy] = [(WIDTH - (2 * radius + 2 * margin) * length) / 2, (HEIGHT - 2 * radius) / 2]
 
-    this._layout = _.map(_.range(expr.length), i => [ox + i * (2 * radius + 2 * margin), oy])
+    this._layout = _.map(_.range(length), i => [ox + i * (2 * radius + 2 * margin), oy])
     this._ox = ox
     this._oy = oy
     this._radius = radius
     this._margin = margin
-  },
-  calculateElements() {
-    const expr = this.state.expression.map(v => v.value).join(" ")
-
-    let result
-    try {
-      result = eval(expr)
-    } catch (err) {
-      result = 0
-    }
-
-    return result
   },
 
   // Handler
@@ -118,34 +86,35 @@ export const Playing = React.createClass({
     this.handleMouseMove(e.touches[0]);
   },
   handleMouseMove({pageX, pageY}) {
-    const {lastPress, isPressed, delta: [dx, dy], expression} = this.state;
+    const {lastPress, isPressed, delta: [dx, dy]} = this.state;
+    const elements = this.props.viewer.get('elements')
+
     if (isPressed) {
       const mouse = [pageX - dx, pageY - dy];
 
       if (Math.abs(mouse[1] - this._oy) < 40) {
-        const index = clamp(Math.round((mouse[0] - this._layout[0][0]) / (this._radius * 2 + this._margin * 2)), 0, expression.length);
-        const newExpression = reinsert(expression, expression.indexOf(lastPress), index);
-        this.setState({
-          mouse: mouse,
-          expression: newExpression
-        });
-      } else {
-        this.setState({
-          mouse: mouse
-        })
+        const to = clamp(Math.round((mouse[0] - this._layout[0][0]) / (this._radius * 2 + this._margin * 2)), 0, elements.size);
+        const from = elements.findIndex(v => v.get('code') === lastPress)
+        if (from !== to) {
+          const newElements = reinsert(elements, from, to);
+          this.props.resortElements(newElements)
+        }
       }
+
+      this.setState({
+        mouse: mouse
+      })
     }
   },
   handleMouseDown(key, [pressX, pressY], {pageX, pageY}) {
     this.setState({
-      lastPress: key,
+      lastPress: key.get('code'),
       isPressed: true,
       delta: [pageX - pressX, pageY - pressY],
       mouse: [pressX, pressY],
     });
   },
   handleMouseUp() {
-    console.log(this.calculateElements())
     this.setState({isPressed: false, delta: [0, 0]});
   },
 
@@ -155,20 +124,20 @@ export const Playing = React.createClass({
       lastPress,
       isPressed,
       mouse,
-      expression,
     } = this.state
+    const elements = this.props.viewer.get('elements')
 
     return (
       <div className={styles.expressionPanel}>
-        {expression.map((op, key) => {
+        {elements.map((op, key) => {
           let style;
           let x;
           let y;
-          let source;
+          let sourceName;
           const visualPosition = key;
-          if (op === lastPress && isPressed) {
+          if (op.get('code') === lastPress && isPressed) {
             [x, y] = mouse;
-            source = op.source
+            sourceName = this.props.players.getIn([op.get('source'), 'name'])
             style = {
               translateX: x,
               translateY: y,
@@ -187,7 +156,7 @@ export const Playing = React.createClass({
           }
 
           return (
-            <Motion key={key} style={style}>
+            <Motion key={op.get('code')} style={style}>
               {({translateX, translateY, scale, boxShadow}) =>
                 <div
                   onMouseDown={this.handleMouseDown.bind(null, op, [x, y])}
@@ -196,7 +165,7 @@ export const Playing = React.createClass({
                   style={{
                     WebkitTransform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
                     transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
-                    zIndex: op === lastPress ? 99 : visualPosition,
+                    zIndex: op.get('code') === lastPress ? 99 : visualPosition,
                     boxShadow: `${boxShadow}px 5px 5px rgba(0,0,0,0.5)`,
                     lineHeight: `${this._radius * 2}px`,
                     height: this._radius * 2,
@@ -206,15 +175,15 @@ export const Playing = React.createClass({
                     fontSize: 1 * this._radius,
                   }}
                 >
-                  {source?<div className={styles.sourceLabel} style={{
+                  {sourceName?<div className={styles.sourceLabel} style={{
                     fontSize: this._radius * 0.7,
                     marginLeft: this._radius - 2,
                     WebkitTransform: `translate3d(-50%, ${-1.6 * this._radius}px, 0)`,
                     transform: `translate3d(-50%, ${-1.6 * this._radius}px, 0)`,
                   }}>
-                    {source}
+                    {sourceName}
                   </div>:null}
-                  {op.value}
+                  {op.get('value')}
                 </div>
               }
             </Motion>
@@ -241,12 +210,8 @@ export const Playing = React.createClass({
 })
 
 function mapStateToProps(state) {
-  const clientId = state.get('clientId')
-
   return {
-    viewer: state.getIn(['player', clientId]),
-    stage: state.get('stage'),
-    targetValue: state.get('targetValue'),
+    players: state.get('player'),
   }
 }
 
