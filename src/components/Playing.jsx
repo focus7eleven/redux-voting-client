@@ -168,7 +168,6 @@ export const Playing = React.createClass({
               translateX: x,
               translateY: y,
               scale: spring(1.2, springSetting1),
-              boxShadow: spring((x - (WIDTH - 50) / 2) / 15, springSetting1),
             };
           } else {
             [x, y] = this._layout[visualPosition];
@@ -177,13 +176,12 @@ export const Playing = React.createClass({
               translateX: spring(x, springSetting2),
               translateY: spring(y, springSetting2),
               scale: spring(1, springSetting1),
-              boxShadow: spring((x - (WIDTH - 50) / 2) / 15, springSetting1),
             };
           }
 
           return (
             <Motion key={op.get('code')} style={style}>
-              {({translateX, translateY, scale, boxShadow}) =>
+              {({translateX, translateY, scale}) =>
                 <div
                   onMouseDown={(evt)=>this.handleMouseDown(op, [x, y], evt)}
                   onTouchStart={(evt)=>this.handleTouchStart(op, [x, y], evt)}
@@ -192,7 +190,6 @@ export const Playing = React.createClass({
                     WebkitTransform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
                     transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
                     zIndex: op.get('code') === lastPress ? 99 : visualPosition,
-                    boxShadow: `${boxShadow}px 5px 5px rgba(0,0,0,0.5)`,
                     lineHeight: `${this._radius * 2}px`,
                     height: this._radius * 2,
                     width: this._radius * 2,
