@@ -167,7 +167,7 @@ export const Playing = React.createClass({
             style = {
               translateX: x,
               translateY: y,
-              scale: spring(1.2, springSetting1),
+              scale: spring(1.2 - 1.2 * Math.min(Math.abs(this._oy - y) / DELETE_LIMIT, 1), springSetting1),
             };
           } else {
             [x, y] = this._layout[visualPosition];
@@ -216,11 +216,6 @@ export const Playing = React.createClass({
     return <div className={styles.container}>
       {this.renderExpression()}
 
-      {/*<div className={styles.operationZone}>
-        <FloatingActionButton >
-          <ContentRemove />
-        </FloatingActionButton>
-      </div>*/}
       <Paper className={styles.socialZone}>
         <span>{originalElement.get('code')}</span>
         <div className={styles.inputArea}>
