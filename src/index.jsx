@@ -37,7 +37,7 @@ const loggerMiddleware = createLogger({
   stateTransformer: (state) => {
     return state.toJS()
   },
-  predicate: (getState, action) => action.type !== 'RESORT_ELEMENTS' && action.type !== 'SET_STATE'
+  predicate: (getState, action) => action.type !== 'RESORT_ELEMENTS'
 })
 const createStoreWithMiddleware = applyMiddleware(
   remoteActionMiddleware(socket),
