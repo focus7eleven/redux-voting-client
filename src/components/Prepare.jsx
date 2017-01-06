@@ -11,10 +11,6 @@ import styles from './Prepare.scss'
 export const Prepare = React.createClass({
   mixins: [PureRenderMixin],
 
-  componentDidMount() {
-    this.props.joinGame()
-  },
-
   // Render.
   render() {
     const {

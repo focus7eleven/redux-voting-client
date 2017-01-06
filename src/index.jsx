@@ -39,7 +39,7 @@ const loggerMiddleware = createLogger({
 })
 const createStoreWithMiddleware = applyMiddleware(
   remoteActionMiddleware(socket),
-  loggerMiddleware
+  loggerMiddleware,
 )(createStore);
 const store = createStoreWithMiddleware(reducer);
 store.dispatch(setClientId(getClientId()));
