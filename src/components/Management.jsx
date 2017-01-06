@@ -122,7 +122,7 @@ export const Management = React.createClass({
           }
           </div>
           <div className={styles.footer}>
-
+            start开始
           </div>
           </div>
       </div>
