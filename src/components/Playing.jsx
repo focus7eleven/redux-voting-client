@@ -64,6 +64,13 @@ export const Playing = React.createClass({
     }
   },
   componentDidMount() {
+    const that = this
+    this._handleInputCode = _.debounce((value = "") => {
+      if (value.length === 3) {
+        this.props.addAnotherElement(value)
+      }
+    }, 1500)
+
     window.addEventListener('touchmove', this.handleTouchMove);
     window.addEventListener('touchend', this.handleMouseUp);
     window.addEventListener('mousemove', this.handleMouseMove);
@@ -79,7 +86,7 @@ export const Playing = React.createClass({
     const length = expr.size
     const radius = RADIUS * Math.pow(0.9, length)
     const margin = radius * 0.2
-    const [ox, oy] = [(WIDTH - (2 * radius + 2 * margin) * length) / 2, (HEIGHT - 2 * radius) / 2]
+    const [ox, oy] = [(WIDTH - (2 * radius + 2 * margin) * length) / 2, (HEIGHT - 2 * radius) / 2 - radius]
 
     this._layout = _.map(_.range(length), i => [ox + i * (2 * radius + 2 * margin), oy])
     this._ox = ox
@@ -136,12 +143,7 @@ export const Playing = React.createClass({
     this.setState({
       inputCodeValue: evt.target.value,
     })
-  },
-  handleAddElement() {
-    this.props.addAnotherElement(this.state.inputCodeValue)
-    this.setState({
-      inputCodeValue: '',
-    })
+    this._handleInputCode(evt.target.value)
   },
 
   // Render.
@@ -167,7 +169,7 @@ export const Playing = React.createClass({
             style = {
               translateX: x,
               translateY: y,
-              scale: spring(1.2 - 1.2 * Math.min(Math.abs(this._oy - y) / DELETE_LIMIT, 1), springSetting1),
+              scale: spring(Math.abs(this._oy - y) > DELETE_LIMIT ? 0 : 1.2, springSetting1),
             };
           } else {
             [x, y] = this._layout[visualPosition];
@@ -220,9 +222,6 @@ export const Playing = React.createClass({
         <span>{originalElement.get('code')}</span>
         <div className={styles.inputArea}>
           <TextField className={styles.inputField} hintStyle={{width: "100%",textAlign: "center"}} hintText="在这输入他人的物资代码" value={this.state.inputCodeValue} onChange={this.handleChangeCodeInput}/>
-          <FloatingActionButton mini={true} >
-            <ContentAdd onClick={this.handleAddElement}/>
-          </FloatingActionButton>
         </div>
       </Paper>
     </div>

@@ -78,31 +78,3 @@ export function deleteElement(code) {
     code,
   }
 }
-
-export function vote(entry) {
-  return {
-    meta: {
-      remote: true
-    },
-    type: 'VOTE',
-    entry
-  };
-}
-
-export function next() {
-  return {
-    meta: {
-      remote: true
-    },
-    type: 'NEXT'
-  };
-}
-
-export function restart() {
-  return {
-    meta: {
-      remote: true
-    },
-    type: 'RESTART'
-  };
-}
