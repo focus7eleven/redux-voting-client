@@ -5,9 +5,26 @@ import {
 } from 'react-redux'
 import * as actionCreators from '../action_creators'
 import PrepareContainer from './Prepare'
+import styles from './Client.scss'
+import Paper from 'material-ui/Paper';
+import Divider from 'material-ui/Divider';
+import PlayingContainer from './Playing'
+import AppBar from 'material-ui/AppBar'
 
 export const Client = React.createClass({
   mixins: [PureRenderMixin],
+
+  calculateElementsValue() {
+    let result
+    try {
+      const expr = this.props.viewer.get('elements').map(v => v.get('value')).join(" ")
+      result = eval(expr)
+    } catch (err) {
+      result = '-'
+    }
+
+    return result
+  },
 
   // Render.
   render() {
@@ -16,20 +33,49 @@ export const Client = React.createClass({
       case 'PREPARE_STAGE':
         content = <PrepareContainer></PrepareContainer>
         break
-      default : 
+      case 'PLAYING_STAGE':
+        content = <PlayingContainer viewer={this.props.viewer}></PlayingContainer>
+        break
+      default :
         content = null
         break
     }
 
-    return <div>
-      <div>目标值为{this.props.targetValue}</div>
+    return <div className={styles.container}>
+      <div>
+        <svg fill="#ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/>
+            <path d="M0 0h24v24H0z" fill="none"/>
+        </svg>
+        <marquee className={styles.notification} behavior="scroll" direction="left">长痔疮的东哥时至运来，获得了【特典】皮肤，真是羡煞旁人！</marquee>
+      </div>
+      <div>
+        <Paper className={styles.targetValueContainer} zDepth={3} circle={true}>
+          <span>{this.props.targetValue}</span>
+          <span>目标</span>
+        </Paper>
+        {
+          this.props.stage == 'PLAYING_STAGE' ?
+          <Paper className={styles.targetValueContainer} zDepth={3} circle={true}>
+            <span>{this.calculateElementsValue()}</span>
+            <span>当前</span>
+          </Paper>
+          :
+          null
+        }
+      </div>
+      {/* <div className={styles.targetValue}>目标值为：{this.props.targetValue}</div> */}
       {content}
+      {/* <div className={styles.footer}>做一个有思想有远见的人</div> */}
     </div>;
   }
 });
 
 function mapStateToProps(state) {
+  const clientId = state.get('clientId')
+
   return {
+    viewer: state.getIn(['player', clientId]),
     stage: state.get('stage'),
     targetValue: state.get('targetValue'),
   }

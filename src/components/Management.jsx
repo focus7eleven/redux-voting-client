@@ -18,6 +18,7 @@ import Paper from 'material-ui/Paper';
 import Subheader from 'material-ui/Subheader'
 import SvgIcon from 'material-ui/SvgIcon'
 import styles from './Management.scss'
+import DeleteIcon from 'material-ui/svg-icons/action/delete'
 import SvgIconFace from 'material-ui/svg-icons/action/face';
 import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
@@ -79,7 +80,6 @@ export const Management = React.createClass({
   mixins: [PureRenderMixin],
 
   // Render.
-
   renderPrepareStage(){
     const {
       stage,
@@ -103,10 +103,10 @@ export const Management = React.createClass({
               return (
                 <div className={styles.box}>
                   <Chip
-                    style={{height:'50px',borderRadius:'50px'}}
-                    labelStyle={{fontSize:'20px',lineHeight:'50px',textOverflow:'ellipsis'}}
+                    style={{height:'25px'}}
+                    labelStyle={{fontSize:'14px',lineHeight:'25px',textOverflow:'ellipsis'}}
                   >
-                  <Avatar color="#444" style={{width:'50px',height:'50px'}}  icon={<SvgIconFace style={{height:'40px',width:'40px'}}/>} />
+                  <Avatar color="#444" style={{width:'25px',height:'25px'}}  icon={<SvgIconFace style={{height:'20px',width:'20px'}}/>} />
                   {
                     item.get('name')
                   }
@@ -140,26 +140,17 @@ export const Management = React.createClass({
       <div className={styles.playingStage}>
         <List className={styles.tipsList}>
           <Subheader>线索表</Subheader>
-          <ListItem
-            primaryText="Profile photo"
-            secondaryText="Change your Google+ profile photo"
-          />
-          <ListItem
-            primaryText="Profile photo"
-            secondaryText="Change your Google+ profile photo"
-          />
-          <ListItem
-            primaryText="Profile photo"
-            secondaryText="Change your Google+ profile photo"
-          />
-          <ListItem
-            primaryText="Profile photo"
-            secondaryText="Change your Google+ profile photo"
-          />
-          <ListItem
-            primaryText="Profile photo"
-            secondaryText="Change your Google+ profile photo"
-          />
+          {
+            readyPlayer.map((player, key) => {
+              const originalElement = player.get('elements').find(v => !!v.get('tip'))
+
+              return <ListItem
+                key={key}
+                primaryText={originalElement.get('code')}
+                secondaryText={originalElement.get('tip')}
+              />
+            })
+          }
         </List>
 
         {/*<div>
@@ -197,7 +188,6 @@ export const Management = React.createClass({
     }
   },
   render() {
-
     return <div className={styles.management}>
       {this.renderContent()}
       {/*<div className="management">

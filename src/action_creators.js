@@ -30,16 +30,16 @@ export function joinGame() {
   }
 }
 
-export function toggleReady(phone) {
+export function toggleReady() {
   return {
     meta: {
       remote: true
     },
     type: 'TOGGLE_READY',
-    phone,
   }
 }
 
+// Playing stage.
 export function startGame() {
   return {
     meta: {
@@ -49,30 +49,32 @@ export function startGame() {
   }
 }
 
-export function vote(entry) {
+export function resortElements(newElements) {
   return {
     meta: {
       remote: true
     },
-    type: 'VOTE',
-    entry
-  };
+    type: 'RESORT_ELEMENTS',
+    newElements,
+  }
 }
 
-export function next() {
+export function addAnotherElement(code) {
   return {
     meta: {
       remote: true
     },
-    type: 'NEXT'
-  };
+    type: 'ADD_ANOTHER_ELEMENT',
+    code,
+  }
 }
 
-export function restart() {
+export function deleteElement(code) {
   return {
     meta: {
-      remote: true
+      remote: true,
     },
-    type: 'RESTART'
-  };
+    type: 'DELETE_ELEMENT',
+    code,
+  }
 }

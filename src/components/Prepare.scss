@@ -1,0 +1,15 @@
+.container{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;;
+  flex-direction: column;
+  padding-bottom: 20px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.name{
+  width: 100%;
+  text-align: center;
+}
