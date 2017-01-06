@@ -43,16 +43,14 @@ export const Client = React.createClass({
     }
 
     // Complete this game.
-    const currentElementsValue = this.calculateElementsValue()
-    if (true) {
     // if (currentElementsValue == this.props.targetValue) {
-      content = <div>
-        <div>恭喜!</div>
-        <List>
-          <ListItem primaryText="1. hahahh 在30秒内完成了游戏，并帮助了3人。"/>
-        </List>
-      </div>
-    }
+    //   content = <div>
+    //     <div>恭喜!</div>
+    //     <List>
+    //       <ListItem primaryText="1. hahahh 在30秒内完成了游戏，并帮助了3人。"/>
+    //     </List>
+    //   </div>
+    // }
 
     return <div className={styles.container}>
       <div>
@@ -70,7 +68,7 @@ export const Client = React.createClass({
         {
           this.props.stage == 'PLAYING_STAGE' ?
           <Paper className={styles.targetValueContainer} zDepth={3} circle={true}>
-            <span>{currentElementsValue}</span>
+            <span>{this.props.viewer.get('value')}</span>
             <span>当前</span>
           </Paper>
           :
