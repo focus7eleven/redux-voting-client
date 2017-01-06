@@ -69,7 +69,7 @@ export const Playing = React.createClass({
       if (value.length === 3) {
         this.props.addAnotherElement(value)
       }
-    }, 1500)
+    }, 1000)
 
     window.addEventListener('touchmove', this.handleTouchMove);
     window.addEventListener('touchend', this.handleMouseUp);
@@ -193,6 +193,7 @@ export const Playing = React.createClass({
                     transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
                     zIndex: op.get('code') === lastPress ? 99 : visualPosition,
                     lineHeight: `${this._radius * 2}px`,
+                    backgroundColor: !!op.get('tip') ? 'rgb(255, 64, 129)' : '#6282df',
                     height: this._radius * 2,
                     width: this._radius * 2,
                     marginLeft: this._margin,
@@ -219,9 +220,9 @@ export const Playing = React.createClass({
       {this.renderExpression()}
 
       <Paper className={styles.socialZone}>
-        <span>{originalElement.get('code')}</span>
+        <span>{viewer.get('name')}：{originalElement.get('code')}</span>
         <div className={styles.inputArea}>
-          <TextField className={styles.inputField} hintStyle={{width: "100%",textAlign: "center"}} hintText="在这输入他人的物资代码" value={this.state.inputCodeValue} onChange={this.handleChangeCodeInput}/>
+          <TextField className={styles.inputField} hintStyle={{width: "100%",textAlign: "center"}} hintText="输入其他人代码" value={this.state.inputCodeValue} onChange={this.handleChangeCodeInput}/>
         </div>
       </Paper>
     </div>
