@@ -176,7 +176,7 @@ export const Management = React.createClass({
               return <ListItem
                 key={key}
                 primaryText={player.get('name')}
-                secondaryText={originalElement.get('tip')}
+                secondaryText={originalElement.get('value')}
               />
             })
           }
@@ -217,7 +217,6 @@ export const Management = React.createClass({
     }
   },
   render() {
-    console.log(this.props.stage);
     return <div className={styles.management}>
       {this.renderContent()}
       {/*<div className="management">
