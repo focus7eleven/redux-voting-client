@@ -22,6 +22,7 @@ import DeleteIcon from 'material-ui/svg-icons/action/delete'
 import SvgIconFace from 'material-ui/svg-icons/action/face';
 import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
+import TimerMixin from 'react-timer-mixin'
 import _ from 'lodash'
 
 const inlineStyles = {
@@ -139,6 +140,28 @@ const money = (props) => {
 
 export const Management = React.createClass({
   mixins: [PureRenderMixin],
+  getInitialState() {
+    return {
+      countDown: 0,
+    }
+  },
+  componentWillReceiveProps(nextProps) {
+    if ((this.props.stage === 'PREPARE_STAGE' || !this.props.stage) && nextProps.stage === 'PLAYING_STAGE') {
+      this._startCountDown(nextProps)
+    }
+  },
+  _startCountDown(props) {
+    const game = props.game
+    const initialCountDown = ~~(game.get('startTime') / 1000) + game.get('totalTime') - ~~(Date.now() / 1000)
+    this.setState({
+      countDown: initialCountDown,
+    })
+    TimerMixin.setInterval(() => {
+      this.setState({
+        countDown: Math.max(this.state.countDown - 1, 0),
+      })
+    }, 1000)
+  },
 
   // Render.
   renderPrepareStage(){
@@ -203,13 +226,14 @@ export const Management = React.createClass({
       <div className={styles.playingStage}>
         <List className={styles.tipsList}>
           <Subheader>线索表</Subheader>
+          <div>倒计时{this.state.countDown}</div>
           {
             readyPlayer.map((player, key) => {
               const originalElement = player.get('elements').find(v => !!v.get('tip'))
 
               return <ListItem
                 key={key}
-                primaryText={originalElement.get('code')}
+                primaryText={player.get('name')}
                 secondaryText={originalElement.get('tip')}
               />
             })
@@ -274,6 +298,7 @@ function mapStateToProps(state) {
     targetValue: state.get('targetValue'),
     player: state.get('player') || Map(),
     clientId: state.get('clientId'),
+    game: state.get('game'),
   }
 }
 

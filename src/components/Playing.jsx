@@ -169,7 +169,7 @@ export const Playing = React.createClass({
             style = {
               translateX: x,
               translateY: y,
-              scale: spring(Math.abs(this._oy - y) > DELETE_LIMIT ? 0 : 1.2, springSetting1),
+              scale: spring(this.props.clientId !== op.get('source') && Math.abs(this._oy - y) > DELETE_LIMIT ? 0 : 1.2, springSetting1),
             };
           } else {
             [x, y] = this._layout[visualPosition];
@@ -230,6 +230,7 @@ export const Playing = React.createClass({
 
 function mapStateToProps(state) {
   return {
+    clientId: state.get('clientId'),
     players: state.get('player'),
   }
 }

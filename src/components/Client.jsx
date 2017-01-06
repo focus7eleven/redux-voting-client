@@ -10,6 +10,7 @@ import Paper from 'material-ui/Paper';
 import Divider from 'material-ui/Divider';
 import PlayingContainer from './Playing'
 import AppBar from 'material-ui/AppBar'
+import {List, ListItem} from 'material-ui/List'
 
 export const Client = React.createClass({
   mixins: [PureRenderMixin],
@@ -41,6 +42,18 @@ export const Client = React.createClass({
         break
     }
 
+    // Complete this game.
+    const currentElementsValue = this.calculateElementsValue()
+    if (true) {
+    // if (currentElementsValue == this.props.targetValue) {
+      content = <div>
+        <div>恭喜!</div>
+        <List>
+          <ListItem primaryText="1. hahahh 在30秒内完成了游戏，并帮助了3人。"/>
+        </List>
+      </div>
+    }
+
     return <div className={styles.container}>
       <div>
         <svg fill="#ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
@@ -57,7 +70,7 @@ export const Client = React.createClass({
         {
           this.props.stage == 'PLAYING_STAGE' ?
           <Paper className={styles.targetValueContainer} zDepth={3} circle={true}>
-            <span>{this.calculateElementsValue()}</span>
+            <span>{currentElementsValue}</span>
             <span>当前</span>
           </Paper>
           :
