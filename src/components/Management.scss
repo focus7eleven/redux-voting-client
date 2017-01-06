@@ -1,9 +1,120 @@
-:local(.management) {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    width: 100%;
+:local(.management){
+  padding:20px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+
+  :local(.prepareStage){
+    width: 700px;
+    height:520px;
+    background-color: #92aeff;
+    background-image: radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.0));
+    overflow: visible;
+    position: relative;
+    :local(.logo){
+      position:absolute;
+      left:40px;
+      top:30px;
+      font-family: PingFangSC;
+    	font-size: 14px;
+    	font-weight: 600;
+    	letter-spacing: 0.8px;
+    	color: #d4dcf9;
+    }
+    :local(.targetValue){
+      top: -25px;
+      right: 40px;
+      position: absolute;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      :local(.targetValueLabel){
+        font-family: PingFangSC;
+      	font-size: 20px;
+      	font-weight: 500;
+      	color: #ffffff;
+        margin-bottom: 10px;
+      }
+      :local(.targetValueBox){
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        :local(.targetValueCard){
+          padding:11px 12px;
+          background-color: #3d3d3d;
+          border-radius:  6px;
+          font-family: ProximaNovaSoft;
+        	font-size: 64px;
+        	font-weight: bold;
+        	color: #ffffff;
+          margin-left: 5px;
+        	text-shadow: 0 6px 8px rgba(0, 0, 0, 0.68);
+        }
+      }
+    }
+    :local(.prepareStageContainer){
+      height: 477px;
+      width:620px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      left:40px;
+      top:77px;
+      box-shadow: 0 25px 100px 0 rgba(0, 0, 0, 0.64);
+    }
+    :local(.content){
+      width:100%;
+      flex-grow: 2;
+      background-color: #ffffff;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding:35px 40px;
+      flex-wrap:wrap;
+      align-content:flex-start;
+      overflow-y: scroll;
+      :local(.box){
+        display: flex;
+        align-items: center;
+        width: 235px;
+        justify-content: space-between;
+        flex-shrink: 0;
+        margin-bottom: 10px;
+        :local(.state){
+          font-size:14px;
+          margin-left: 10px;
+          :local(.item){
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
+    }
+    :local(.footer){
+      height: 68px;
+      background-color: #202020;
+      font-family: PingFangSC;
+    	font-size: 36px;
+    	font-weight: 600;
+    	letter-spacing: 2px;
+    	color: #b1c3ff;
+      text-align: center;
+      line-height: 68px;
+      cursor:pointer;
+    }
+  }
+
+  :local(.playingStage) {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 100px 0 0 0;
+
 
     :local(.prepareStage) {
         display: flex;
@@ -19,7 +130,6 @@
         flex-direction: column;
         align-items: center;
         padding: 100px 0 0 0;
-
-        :local(.tipsList) {}
-    }
+      }
+  }
 }

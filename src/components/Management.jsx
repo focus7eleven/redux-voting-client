@@ -24,78 +24,8 @@ import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
 import TimerMixin from 'react-timer-mixin'
 import _ from 'lodash'
+import FontIcon from 'material-ui/FontIcon';
 
-const inlineStyles = {
-  chip: {
-    borderRadius:30,
-
-    labelStyle:{
-      fontSize:'30px',
-      lineHeight:'30px',
-      padding:'15px',
-    }
-  },
-  paper:{
-    height:'300px',
-    width:'600px',
-    padding:'20px',
-    display:'flex',
-    flexDirection:'column',
-    justifyContent:'space-around',
-    borderRadius:'5px',
-    margin:'5px',
-    divider:{
-      marginLeft:0,
-      marginTop:0,
-    },
-    chip: {
-      borderRadius:30,
-
-      labelStyle:{
-        fontSize:'30px',
-        lineHeight:'30px',
-        padding:'15px',
-      }
-    }
-  },
-  unready:{
-    boxShadow:'0 1px 6px rgba(255, 0, 0, 0.35), 0 1px 4px rgba(255, 0, 0, 0.47)'
-  },
-  ready:{
-    boxShadow:'0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.12)'
-  },
-  button:{
-    margin: 12,
-  },
-  buttonStyle:{
-    height:'70px',
-    overlayStyle:{
-      height:'70px'
-    },
-    labelStyle:{
-      height:'70px',
-      fontSize:'40px',
-      lineHeight:'70px',
-    }
-  },
-  list:{
-    padding:'12px'
-  },
-  listItem:{
-    backgroundColor:'rgba(0,	179,	206,	.5)',
-  },
-  innerDivStyle:{
-    fontSize:'30px',
-    lineHeight:'30px',
-  },
-  wrapper: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  subheader:{
-    paddingLeft:'0',
-  }
-};
 
 const offline = (props)=>{
   return (
@@ -131,10 +61,19 @@ const lockOff = (props) => {
 
 const money = (props) => {
   return (
-    <SvgIcon {...props} fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <SvgIcon {...props} fill="#6069e5" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
       <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
-      <path d="M0 0h24v24H0z" fill="none"/>
+      <path d="M0 0h24v24H0z" fill="#6069e5"/>
     </SvgIcon>
+  )
+}
+
+const done = (props) => {
+  return (
+    <svg {...props} fill="#6069e5" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="none"/>
+      <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
+    </svg>
   )
 }
 
@@ -163,6 +102,10 @@ export const Management = React.createClass({
     }, 1000)
   },
 
+  handleStartGame(){
+    this.props.startGame();
+  },
+
   // Render.
   renderPrepareStage(){
     const {
@@ -172,44 +115,43 @@ export const Management = React.createClass({
     } = this.props
     const readyPlayer = this.props.player.toList().filter(v => v.get('isReady'))
     return(
-      <div style={{height:'100%',width:'100%',padding:'20px'}} className={styles.prepareStage}>
-        <div className={styles.cardContainer} style={{display:'flex'}}>
-        {
-          this.props.player.toList().map( (v,key) => {
-            if(v.get('isReady')){
-              return (
-                <Paper key={key} style={_.extend({},inlineStyles.paper,inlineStyles.ready)} zDepth={1}>
-                  <Chip
-                  style={inlineStyles.paper.chip}
-                  labelStyle={inlineStyles.paper.chip.labelStyle}
-                  >
-                    <Avatar color="#444" style={{height:'60px',width:'60px'}} icon={<SvgIconFace style={{width:'50px',height:'50px'}}/>} />
-                    {v.get('name')}
-                  </Chip>
-                  <Divider style={inlineStyles.paper.divider} inset={true} />
-                  <span style={{fontSize:'25px',display:'flex',alignItems:'center'}}>{lockOn()}已准备</span>
-                </Paper>
-              )
-            }else{
-              return (
-                <Paper key={key} style={_.extend({},inlineStyles.paper,inlineStyles.unready)} zDepth={1}>
-                  <Chip
-                  style={inlineStyles.paper.chip}
-                  labelStyle={inlineStyles.paper.chip.labelStyle}
-                  >
-                    <Avatar color="#444" style={{height:'60px',width:'60px'}} icon={<SvgIconFace style={{width:'50px',height:'50px'}}/>} />
-                    {v.get('name')}
-                  </Chip>
-                  <Divider style={inlineStyles.paper.divider} inset={true} />
-                  <span style={{fontSize:'25px',display:'flex',alignItems:'center'}}>{lockOff()}未准备</span>
-                </Paper>
-              )
-            }
-          })
-        }
+      <div className={styles.prepareStage}>
+        <div className={styles.logo}>做一个有思想有远见的人</div>
+        <div className={styles.targetValue}>
+          <div className={styles.targetValueLabel}>目标值为:</div>
+          <div className={styles.targetValueBox}>
+            <div className={styles.targetValueCard}>2</div>
+            <div className={styles.targetValueCard}>4</div>
+          </div>
         </div>
-        <div>
-          {readyPlayer.size?<RaisedButton label="Primary" primary={true} onClick={this.props.startGame} style={inlineStyles.button} overlayStyle={inlineStyles.buttonStyle.overlayStyle} buttonStyle={inlineStyles.buttonStyle} labelStyle={inlineStyles.buttonStyle.labelStyle}/>:null}
+        <div className={styles.prepareStageContainer}>
+          <div className={styles.content}>
+          {
+            this.props.player.toList().map( (item,key) => {
+              return (
+                <div className={styles.box} key={key}>
+                  <Chip
+                    style={{height:'25px'}}
+                    labelStyle={{fontSize:'14px',lineHeight:'25px',textOverflow:'ellipsis'}}
+                  >
+                  <Avatar color="#444" style={{width:'25px',height:'25px'}}  icon={<SvgIconFace style={{height:'20px',width:'20px'}}/>} />
+                  {
+                    item.get('name')
+                  }
+                  </Chip>
+                  <span className={styles.state}>
+                  {
+                    item.get('isReady')?<span className={styles.item} style={{color:'#6069e5'}}>{done()}已准备</span>:<span className={styles.item} style={{color:'#cccccc'}}>准备中...</span>
+                  }
+                  </span>
+                </div>
+              )
+            })
+          }
+          </div>
+          <div className={styles.footer} onTouchStart={this.handleStartGame} onClick={this.handleStartGame}>
+            开始
+          </div>
         </div>
       </div>
     )
@@ -275,15 +217,8 @@ export const Management = React.createClass({
     }
   },
   render() {
+    console.log(this.props.stage);
     return <div className={styles.management}>
-      <Chip
-        style={inlineStyles.chip}
-        className={styles.targetValue}
-        labelStyle={inlineStyles.chip.labelStyle}
-      >
-        <Avatar color="#444" style={{height:'55px',width:'55px'}} icon={money({style:{width:'50px',height:'50px'}})} />
-        目标值为{this.props.targetValue}
-      </Chip>
       {this.renderContent()}
       {/*<div className="management">
         <button>准备阶段</button>

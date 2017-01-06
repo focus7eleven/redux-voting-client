@@ -43,14 +43,15 @@ export const Client = React.createClass({
     }
 
     // Complete this game.
-    // if (currentElementsValue == this.props.targetValue) {
-    //   content = <div>
-    //     <div>恭喜!</div>
-    //     <List>
-    //       <ListItem primaryText="1. hahahh 在30秒内完成了游戏，并帮助了3人。"/>
-    //     </List>
-    //   </div>
-    // }
+    const currentElementsValue = this.calculateElementsValue()
+    if (currentElementsValue == this.props.targetValue) {
+      content = <div>
+        <div>恭喜!</div>
+        <List>
+          <ListItem primaryText="1. hahahh 在30秒内完成了游戏，并帮助了3人。"/>
+        </List>
+      </div>
+    }
 
     return <div className={styles.container}>
       <div>
