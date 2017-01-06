@@ -116,6 +116,7 @@ export const Management = React.createClass({
     const readyPlayer = this.props.player.toList().filter(v => v.get('isReady'))
     return(
       <div className={styles.prepareStage}>
+        <div className={styles.logo}>做一个有思想有远见的人</div>
         <div className={styles.targetValue}>
           <div className={styles.targetValueLabel}>目标值为:</div>
           <div className={styles.targetValueBox}>
@@ -126,9 +127,9 @@ export const Management = React.createClass({
         <div className={styles.prepareStageContainer}>
           <div className={styles.content}>
           {
-            this.props.player.toList().map( item => {
+            this.props.player.toList().map( (item,key) => {
               return (
-                <div className={styles.box}>
+                <div className={styles.box} key={key}>
                   <Chip
                     style={{height:'25px'}}
                     labelStyle={{fontSize:'14px',lineHeight:'25px',textOverflow:'ellipsis'}}
