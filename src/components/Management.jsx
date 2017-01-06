@@ -102,6 +102,10 @@ export const Management = React.createClass({
     }, 1000)
   },
 
+  handleStartGame(){
+    this.props.startGame();
+  },
+
   // Render.
   renderPrepareStage(){
     const {
@@ -144,10 +148,10 @@ export const Management = React.createClass({
             })
           }
           </div>
-          <div className={styles.footer}>
-            start开始
+          <div className={styles.footer} onTouchStart={this.handleStartGame} onClick={this.handleStartGame}>
+            开始
           </div>
-          </div>
+        </div>
       </div>
     )
   },
@@ -212,6 +216,7 @@ export const Management = React.createClass({
     }
   },
   render() {
+    console.log(this.props.stage);
     return <div className={styles.management}>
       {this.renderContent()}
       {/*<div className="management">

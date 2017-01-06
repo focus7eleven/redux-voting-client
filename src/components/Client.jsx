@@ -44,8 +44,8 @@ export const Client = React.createClass({
 
     // Complete this game.
     const currentElementsValue = this.calculateElementsValue()
-    if (true) {
-    // if (currentElementsValue == this.props.targetValue) {
+    // if (true) {
+    if (currentElementsValue == this.props.targetValue) {
       content = <div>
         <div>恭喜!</div>
         <List>
