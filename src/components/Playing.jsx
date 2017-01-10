@@ -16,6 +16,7 @@ import TextField from 'material-ui/TextField';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
+import Slider from 'material-ui/Slider'
 
 const springSetting1 = {
   stiffness: 120,
@@ -224,6 +225,7 @@ export const Playing = React.createClass({
         <div className={styles.inputArea}>
           <TextField className={styles.inputField} hintStyle={{width: "100%",textAlign: "center"}} hintText="输入其他人代码" value={this.state.inputCodeValue} onChange={this.handleChangeCodeInput}/>
         </div>
+        <Slider className={styles.valueSlider} step={0.10} value={0.5} />
       </Paper>
     </div>
   }

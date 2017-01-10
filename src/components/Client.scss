@@ -8,7 +8,8 @@ $PAPER_MAX_SIZE: 100vh * 0.30;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding-bottom: 3.125vh;
+  padding-bottom: 2.125vh;
+  background-color: #fafafa;
 
   >div:first-child{
     width: 100%;
@@ -53,7 +54,7 @@ $PAPER_MAX_SIZE: 100vh * 0.30;
   align-items: center;
   >span:first-child{
     color: #4a4a4a;
-    font-size: 56px;
+    font-size: 7vh;
   }
   >span:nth-child(2){
     color: #4a4a4a;

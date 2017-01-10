@@ -12,6 +12,7 @@ body {
 
 * {
   box-sizing: border-box;
+  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft Yahei', sans-serif;
 }
 
 /* Voting Screen */

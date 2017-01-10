@@ -63,6 +63,7 @@ export const Client = React.createClass({
         </svg>
         <marquee className={styles.notification} behavior="scroll" direction="left">长痔疮的东哥时至运来，获得了【特典】皮肤，真是羡煞旁人！</marquee>
       </div>
+
       <div>
         <Paper className={styles.targetValueContainer} zDepth={3} circle={true}>
           <span>{this.props.targetValue}</span>
@@ -78,9 +79,8 @@ export const Client = React.createClass({
           null
         }
       </div>
-      {/* <div className={styles.targetValue}>目标值为：{this.props.targetValue}</div> */}
+      
       {content}
-      {/* <div className={styles.footer}>做一个有思想有远见的人</div> */}
     </div>;
   }
 });
