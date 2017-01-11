@@ -15,20 +15,23 @@ import {List, ListItem} from 'material-ui/List'
 export const Client = React.createClass({
   mixins: [PureRenderMixin],
 
-  calculateElementsValue() {
-    let result
-    try {
-      const expr = this.props.viewer.get('elements').map(v => v.get('value')).join(" ")
-      result = eval(expr)
-    } catch (err) {
-      result = '-'
-    }
+  componentWillMount() {
+    this.props.joinGame()
 
-    return result
+    if (this.props.viewer && !this.props.isComplete && this.props.viewer.get('value') == this.props.targetValue) {
+      this.props.signalComplete(Date.now())
+    }
+  },
+  componentWillUpdate(nextProps, nextState) {
+    if (nextProps.viewer &&  this.props.viewer && !this.props.isComplete && nextProps.viewer.get('value') == this.props.targetValue) {
+      this.props.signalComplete(Date.now())
+    }
   },
 
   // Render.
   render() {
+    if (!this.props.viewer) return null
+
     let content
     switch (this.props.stage) {
       case 'PREPARE_STAGE':
@@ -43,8 +46,7 @@ export const Client = React.createClass({
     }
 
     // Complete this game.
-    const currentElementsValue = this.calculateElementsValue()
-    if (currentElementsValue == this.props.targetValue) {
+    if (this.props.viewer.get('value') == this.props.targetValue) {
       content = <div>
         <div>恭喜!</div>
         <List>
@@ -61,6 +63,7 @@ export const Client = React.createClass({
         </svg>
         <marquee className={styles.notification} behavior="scroll" direction="left">长痔疮的东哥时至运来，获得了【特典】皮肤，真是羡煞旁人！</marquee>
       </div>
+
       <div>
         <Paper className={styles.targetValueContainer} zDepth={3} circle={true}>
           <span>{this.props.targetValue}</span>
@@ -76,9 +79,8 @@ export const Client = React.createClass({
           null
         }
       </div>
-      {/* <div className={styles.targetValue}>目标值为：{this.props.targetValue}</div> */}
+      
       {content}
-      {/* <div className={styles.footer}>做一个有思想有远见的人</div> */}
     </div>;
   }
 });
@@ -90,6 +92,7 @@ function mapStateToProps(state) {
     viewer: state.getIn(['player', clientId]),
     stage: state.get('stage'),
     targetValue: state.get('targetValue'),
+    isComplete: !!state.getIn(['result', clientId]),
   }
 }
 

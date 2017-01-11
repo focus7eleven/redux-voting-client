@@ -8,12 +8,12 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField';
 import styles from './Prepare.scss'
 
+const buttonStyle = {
+  backgroundColor: '#6282de',
+}
+
 export const Prepare = React.createClass({
   mixins: [PureRenderMixin],
-
-  componentDidMount() {
-    this.props.joinGame()
-  },
 
   // Render.
   render() {
@@ -26,7 +26,11 @@ export const Prepare = React.createClass({
 
     return <div className={styles.container}>
       <div className={styles.name}>欢迎你：{viewer.get('name')}</div>
-      <RaisedButton fullWidth={true} primary={true} label={viewer.get('isReady')?'取消准备':'准备'} onClick={this.props.toggleReady}></RaisedButton>
+
+      <div>
+        <RaisedButton overlayStyle={buttonStyle} style={buttonStyle} className={styles.button} fullWidth={true} primary={true} label={viewer.get('isReady')?'取消准备':'准备'} onClick={this.props.toggleReady}></RaisedButton>
+        <div className={styles.slogan}>做一个有思想有远见的人</div>
+      </div>
     </div>
   }
 });

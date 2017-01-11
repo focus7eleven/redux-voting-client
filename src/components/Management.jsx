@@ -26,7 +26,6 @@ import Divider from 'material-ui/Divider';
 import TimerMixin from 'react-timer-mixin'
 import _ from 'lodash'
 import FontIcon from 'material-ui/FontIcon';
-import Ticker from './Ticker'
 
 const offline = (props)=>{
   return (
@@ -246,7 +245,6 @@ export const Management = React.createClass({
     }
   },
   render() {
-    console.log(this.props.stage);
     return <div className={styles.management}>
       <div className={styles.prepareStage}>
         <div className={styles.logo}>做一个有思想有远见的人</div>

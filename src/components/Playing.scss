@@ -2,23 +2,25 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: space-between;
 	width: 100%;
 }
 
 :local(.expressionPanel) {
 	width: 100%;
 	height: 45%;
+	margin-top: 10vh;
 	max-height: calc( 100% - 125px );
 	position: relative;
 
 	:local(.expressionElement) {
 		user-select: none;
+		border-style: solid;
+		border-width: 0.5px;
 		cursor: pointer;
-		background-color: rgb(69, 105, 144);
 		transform: translate3d(0px, 0px, 0px) scale(1);
 		z-index: 99;
 		position: absolute;
-		border: 1px solid black;
 		border-radius: 99px;
 		width: 50px;
 		height: 50px;
@@ -46,15 +48,17 @@
 }
 
 :local(.socialZone){
-	width: calc( 100% - 60px );
-	min-height: 125px;
+	width: 89vw;
+	height: 18.75vh;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
+	padding: 3.125vh 0;
 	>span{
-		font-size: 24px;
-		margin-bottom: 8px;
+		font-size: 16px;
+		font-weight: 500;
+		color: #4a4a4a;
 	}
 	:local(.inputArea){
 		display: flex;
@@ -62,11 +66,20 @@
 		justify-content: space-around;
 		align-items: center;
 		width: 95%;
-		:local(.inputField){
+		height: 4.5vh;
+		:local(.inputField) {
 			width: 75% !important;
+			>div{
+				font-size: 14px;
+			}
 			>input{
+				font-size: 14px;
 				text-align: center;
 			}
 		}
+	}
+	
+	:local(.valueSlider) {
+		width: 100%;	
 	}
 }

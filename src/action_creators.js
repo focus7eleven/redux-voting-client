@@ -78,3 +78,13 @@ export function deleteElement(code) {
     code,
   }
 }
+
+export function signalComplete(timestamp) {
+  return {
+    meta: {
+      remote: true,
+    },
+    type: 'SIGNAL_COMPLETE',
+    timestamp,
+  }
+}
