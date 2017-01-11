@@ -6,6 +6,7 @@ import {
 import * as actionCreators from '../action_creators'
 import {
   Map,
+  fromJS,
 } from 'immutable'
 import Chip from 'material-ui/Chip';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -25,7 +26,6 @@ import Divider from 'material-ui/Divider';
 import TimerMixin from 'react-timer-mixin'
 import _ from 'lodash'
 import FontIcon from 'material-ui/FontIcon';
-
 
 const offline = (props)=>{
   return (
@@ -84,6 +84,58 @@ export const Management = React.createClass({
       countDown: 0,
     }
   },
+
+  getDefaultProps(){
+    return {
+      tipList: fromJS([{
+        name: "Kdot1",
+        tip: "test",
+      },{
+        name: "Kdot2",
+        tip: "test",
+      },{
+        name: "Kdot3",
+        tip: "test",
+      },{
+        name: "Kdot4",
+        tip: "test",
+      },{
+        name: "Kdot5",
+        tip: "test",
+      },{
+        name: "Kdot6",
+        tip: "test",
+      },{
+        name: "Kdot7",
+        tip: "test",
+      },{
+        name: "Kdot8",
+        tip: "test",
+      },{
+        name: "Kdot9",
+        tip: "test",
+      },{
+        name: "Kdot10",
+        tip: "test",
+      },{
+        name: "Kdot11",
+        tip: "test",
+      },{
+        name: "Kdot12",
+        tip: "test",
+      },{
+        name: "Kdot13",
+        tip: "test",
+      },{
+        name: "Kdot14",
+        tip: "test",
+      },{
+        name: "Kdot15",
+        tip: "test",
+      }])
+    }
+  },
+
   componentWillReceiveProps(nextProps) {
     if ((this.props.stage === 'PREPARE_STAGE' || !this.props.stage) && nextProps.stage === 'PLAYING_STAGE') {
       this._startCountDown(nextProps)
@@ -115,44 +167,29 @@ export const Management = React.createClass({
     } = this.props
     const readyPlayer = this.props.player.toList().filter(v => v.get('isReady'))
     return(
-      <div className={styles.prepareStage}>
-        <div className={styles.logo}>做一个有思想有远见的人</div>
-        <div className={styles.targetValue}>
-          <div className={styles.targetValueLabel}>目标值为：</div>
-          <div className={styles.targetValueBox}>
-            <div className={styles.targetValueCard}>2</div>
-            <div className={styles.targetValueCard}>4</div>
-          </div>
-        </div>
-        <div className={styles.prepareStageContainer}>
-          <div className={styles.content}>
-          {
-            this.props.player.toList().map( (item,key) => {
-              return (
-                <div className={styles.box} key={key}>
-                  <Chip
-                    style={{height:'25px'}}
-                    labelStyle={{fontSize:'14px',lineHeight:'25px',textOverflow:'ellipsis'}}
-                  >
-                  <Avatar color="#444" style={{width:'25px',height:'25px'}}  icon={<SvgIconFace style={{height:'20px',width:'20px'}}/>} />
-                  {
-                    item.get('name')
-                  }
-                  </Chip>
-                  <span className={styles.state}>
-                  {
-                    item.get('isReady')?<span className={styles.item} style={{color:'#6069e5'}}>{done()}已准备</span>:<span className={styles.item} style={{color:'#cccccc'}}>准备中...</span>
-                  }
-                  </span>
-                </div>
-              )
-            })
-          }
-          </div>
-          <div className={styles.footer} onTouchStart={this.handleStartGame} onClick={this.handleStartGame}>
-            开始
-          </div>
-        </div>
+      <div className={styles.content}>
+      {
+        this.props.player.toList().map( (item,key) => {
+          return (
+            <div className={styles.box} key={key}>
+              <Chip
+                style={{height:'25px'}}
+                labelStyle={{fontSize:'14px',lineHeight:'25px',textOverflow:'ellipsis'}}
+              >
+              <Avatar color="#444" style={{width:'25px',height:'25px'}}  icon={<SvgIconFace style={{height:'20px',width:'20px'}}/>} />
+              {
+                item.get('name')
+              }
+              </Chip>
+              <span className={styles.state}>
+              {
+                item.get('isReady')?<span className={styles.item} style={{color:'#6069e5'}}>{done()}已准备</span>:<span className={styles.item} style={{color:'#cccccc'}}>准备中...</span>
+              }
+              </span>
+            </div>
+          )
+        })
+      }
       </div>
     )
   },
@@ -162,40 +199,31 @@ export const Management = React.createClass({
       stage,
       targetValue,
       clientId,
+      tipList,
     } = this.props
     const readyPlayer = this.props.player.toList().filter(v => v.get('isReady'))
     return (
-      <div className={styles.playingStage}>
-        <List className={styles.tipsList}>
-          <Subheader>线索表</Subheader>
-          <div>倒计时{this.state.countDown}</div>
+      <div className={styles.tipContent}>
+        {/* <div className={styles.shadeCover}></div> */}
+        <div className={styles.tipContainer}>
           {
-            readyPlayer.map((player, key) => {
-              const originalElement = player.get('elements').find(v => !!v.get('tip'))
-
-              return <ListItem
-                key={key}
-                primaryText={player.get('name')}
-                secondaryText={originalElement.get('value')}
-              />
+            tipList.map((item,index)=>{
+              return (
+                <div style={{animationDelay: index*(tipList.size/15)+'s'}} key={index} className={styles.tip}>
+                  <Chip
+                    style={{height:'25px'}}
+                    labelStyle={{fontSize:'14px',lineHeight:'25px',textOverflow:'ellipsis'}}
+                  >
+                  <Avatar color="#444" style={{width:'25px',height:'25px'}}  icon={<SvgIconFace style={{height:'20px',width:'20px'}}/>} />
+                    {item.get('name')}
+                  </Chip>
+                  <span className={styles.tipDetail}>{item.get('tip')}</span>
+                </div>
+              )
             })
           }
-        </List>
-
-        {/*<div>
-          {readyPlayer.map((player, key) => {
-            return <div key={key}>
-              {player.get('name')}:
-              <div>
-                {
-                  player.get('elements').map((ele, key) => <span key={key} style={ele.get('source') === clientId?{color: 'red'}:{}}>
-                    {ele.get('value')}
-                  </span>)
-                }
-              </div>
-            </div>
-          })}
-        </div>*/}
+        </div>
+        {/* <div className={styles.shadeCoverBottom}></div> */}
       </div>
     )
   },
@@ -218,10 +246,25 @@ export const Management = React.createClass({
   },
   render() {
     return <div className={styles.management}>
-      {this.renderContent()}
-      {/*<div className="management">
-        <button>准备阶段</button>
-      </div>*/}
+      <div className={styles.prepareStage}>
+        <div className={styles.logo}>做一个有思想有远见的人</div>
+        <div className={styles.targetValue}>
+          <div className={styles.targetValueLabel}>目标值为:</div>
+          <div className={styles.targetValueBox}>
+            <div className={styles.targetValueCard}>2</div>
+            <div className={styles.targetValueCard}>4</div>
+          </div>
+        </div>
+        <div className={styles.prepareStageContainer}>
+          {this.renderContent()}
+          <div className={styles.footer} onTouchStart={this.handleStartGame} onClick={this.handleStartGame}>
+            开始
+          </div>
+        </div>
+        {/*<div className="management">
+          <button>准备阶段</button>
+        </div>*/}
+      </div>
     </div>;
   }
 });

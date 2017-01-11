@@ -91,6 +91,67 @@
         }
       }
     }
+    :local(.tipContent){
+      width:100%;
+      background-color: #ffffff;
+      position: relative;
+      :local(.tipContainer){
+        padding: 35px 90px;
+        position: relative;
+        width: 100%;
+        height: 410px;
+        overflow-y: hidden;
+        :local(.risingUpDiv){
+          display: flex;
+          flex-direction: column;
+          position: absolute;
+          bottom: -410px;
+          width: 410px;
+          height: 410px;
+          // animation-duration: 12s;
+          // animation-name: risingUp;
+          // animation-iteration-count: infinite;
+          // animation-timing-function: linear;
+        }
+        :local(.tip) {
+          position: absolute;
+          width: 400px;
+          display: flex;
+          justify-content: flex-start;
+          flex-direction: row;
+          margin-bottom: 20px;
+          align-items: center;
+          animation-duration: 19s;
+          animation-name: risingUp;
+          animation-iteration-count: infinite;
+          animation-timing-function: linear;
+          // opacity: 0;
+          height: 50px;
+          animation-fill-mode: backwards;
+          // animation-direction: alternate;
+          :local(.tipDetail){
+            margin-left: 30px;
+            font-size: 14px;
+          }
+        }
+      }
+      :local(.shadeCover){
+        position:absolute;
+        width: 100%;
+        height: 60px;
+        opacity: 0.5;
+        background-color: white;
+      }
+      :local(.shadeCoverBottom){
+        bottom: 0px;
+        position:absolute;
+        width: 100%;
+        height: 60px;
+        opacity: 0.5;
+        background-color: white;
+      }
+
+    }
     :local(.footer){
       height: 68px;
       background-color: #202020;
@@ -104,29 +165,27 @@
     }
   }
 
-  :local(.playingStage) {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 100px 0 0 0;
 
+}
 
-    :local(.prepareStage) {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        width: 100%;
-    }
-
-    :local(.playingStage) {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 100px 0 0 0;
-      }
-  }
+@keyframes fadeInAndOut {
+  0%   {opacity: 0}
+  25%   {opacity: 1}
+  50%   {opacity: 1}
+  75%   {opacity: 1}
+  100%   {opacity: 0}
+}
+// @keyframes risingUp {
+//   0%   {bottom: -410px}
+//   25%   {bottom: -205px}
+//   50%   {bottom: 0px}
+//   75%   {bottom: 205px}
+//   100%   {bottom: 410px}
+// }
+@keyframes risingUp {
+  0%   {bottom: -45px;opacity: 0}
+  25%   {bottom: -45px;opacity: 0}
+  50%   {bottom: 173px;opacity: 1}
+  75%   {bottom: 377px;opacity: 0.3}
+  100%   {bottom: 391px;opacity: 0}
 }
