@@ -16,7 +16,8 @@ import TextField from 'material-ui/TextField';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
-import Slider from 'material-ui/Slider'
+import Slider from 'nw-react-slider'
+import 'nw-react-slider/dist/nw-react-slider.css'
 
 const springSetting1 = {
   stiffness: 120,
@@ -26,6 +27,7 @@ const springSetting2 = {
   stiffness: 120,
   damping: 17
 };
+const SLIDER_MARKERS = [{value: 0, label: '0'}, {value: 1, label: '1'}, {value: 2, label: '2'}, {value: 3, label: '3'}, {value: 4, label: '4'}, {value: 5, label: '5'}, {value: 6, label: '6'}, {value: 7, label: '7'}, {value: 8, label: '8'}, {value: 9, label: '9'}, {value: 10, label: '+'}, {value: 11, label: '-'}, {value: 12, label: '×'}, {value: 13, label: '÷'}]
 
 function reinsert(arr, from, to) {
   arr = arr.slice(0);
@@ -40,6 +42,7 @@ function clamp(n, min, max) {
 }
 
 const [WIDTH, HEIGHT, RADIUS, DELETE_LIMIT] = [window.innerWidth, 200, 40, 50]
+const CODE_SET = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
 export const Playing = React.createClass({
   propTypes: {
@@ -57,6 +60,8 @@ export const Playing = React.createClass({
       isPressed: false,
 
       inputCodeValue: '',
+      targetValue: 0,
+      pressedKey: [],
     }
   },
   componentWillReceiveProps(nextProps) {
@@ -66,11 +71,6 @@ export const Playing = React.createClass({
   },
   componentDidMount() {
     const that = this
-    this._handleInputCode = _.debounce((value = "") => {
-      if (value.length === 3) {
-        this.props.addAnotherElement(value)
-      }
-    }, 1000)
 
     window.addEventListener('touchmove', this.handleTouchMove);
     window.addEventListener('touchend', this.handleMouseUp);
@@ -94,6 +94,16 @@ export const Playing = React.createClass({
     this._oy = oy
     this._radius = radius
     this._margin = margin
+  },
+  getKeyButton(code) {
+    return _.reduce(code.split(''), (reduction, v) => {
+      reduction.push(v)
+      reduction.push(CODE_SET[(CODE_SET.indexOf(v) + 9) % CODE_SET.length])
+      return reduction
+    }, [])
+  },
+  getSign(v) {
+    return _.find(SLIDER_MARKERS, marker => marker.value === v).label
   },
 
   // Handler
@@ -140,11 +150,30 @@ export const Playing = React.createClass({
 
     this.setState({isPressed: false, delta: [0, 0]})
   },
-  handleChangeCodeInput(evt) {
+  handleChangeTarget(v) {
     this.setState({
-      inputCodeValue: evt.target.value,
+      targetValue: v,
     })
-    this._handleInputCode(evt.target.value)
+    this.props.addAnotherElement(this.state.pressedKey, this.getSign(v))
+  },
+  handlePressKey(k, evt) {
+    evt.preventDefault()
+    evt.stopPropagation()
+
+    let pressedKey = this.state.pressedKey.slice()
+
+    if (~this.state.pressedKey.indexOf(k)) {
+      pressedKey = this.state.pressedKey.filter(v => v !== k)
+      this.setState({
+        pressedKey,
+      })
+    } else {
+      pressedKey.push(k)
+      this.setState({
+        pressedKey,
+      })
+    }
+    this.props.addAnotherElement(pressedKey, this.getSign(this.state.targetValue))
   },
 
   // Render.
@@ -221,11 +250,19 @@ export const Playing = React.createClass({
       {this.renderExpression()}
 
       <Paper className={styles.socialZone}>
-        <span>{viewer.get('name')}：{originalElement.get('code')}</span>
-        <div className={styles.inputArea}>
-          <TextField className={styles.inputField} hintStyle={{width: "100%",textAlign: "center"}} hintText="输入其他人代码" value={this.state.inputCodeValue} onChange={this.handleChangeCodeInput}/>
+        <Slider
+          triggerOnChangeWhileDragging={false}
+          value={this.state.targetValue}
+          min={0}
+          max={13}
+          ticks
+          markerLabel={SLIDER_MARKERS}
+          onChange={this.handleChangeTarget}
+        />
+
+        <div className={styles.keyboard}>
+          {this.getKeyButton(originalElement.get('code')).map((v, k) => <span key={k} style={~this.state.pressedKey.indexOf(v)?{backgroundColor: '#b8b8b8'}:{}} onMouseDown={this.handlePressKey.bind(this, v)} onTouchStart={this.handlePressKey.bind(this, v)}>{v}</span>)}
         </div>
-        <Slider className={styles.valueSlider} step={0.10} value={0.5} />
       </Paper>
     </div>
   }

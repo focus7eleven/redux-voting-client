@@ -59,13 +59,14 @@ export function resortElements(newElements) {
   }
 }
 
-export function addAnotherElement(code) {
+export function addAnotherElement(codeList, targetValue) {
   return {
     meta: {
       remote: true
     },
     type: 'ADD_ANOTHER_ELEMENT',
-    code,
+    codeList,
+    targetValue,
   }
 }
 
