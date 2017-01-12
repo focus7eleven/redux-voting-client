@@ -96,11 +96,7 @@ export const Playing = React.createClass({
     this._margin = margin
   },
   getKeyButton(code) {
-    return _.reduce(code.split(''), (reduction, v) => {
-      reduction.push(v)
-      reduction.push(CODE_SET[(CODE_SET.indexOf(v) + 9) % CODE_SET.length])
-      return reduction
-    }, [])
+    return ['R', 'A', 'N', 'D', 'O', 'M']
   },
   getSign(v) {
     return _.find(SLIDER_MARKERS, marker => marker.value === v).label
