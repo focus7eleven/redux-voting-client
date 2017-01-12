@@ -26,6 +26,10 @@ import Divider from 'material-ui/Divider';
 import TimerMixin from 'react-timer-mixin'
 import _ from 'lodash'
 import FontIcon from 'material-ui/FontIcon';
+import {
+  VelocityComponent
+} from 'velocity-react'
+import Velocity from 'velocity-animate'
 
 const offline = (props)=>{
   return (
@@ -78,68 +82,27 @@ const done = (props) => {
 }
 
 export const Management = React.createClass({
-  mixins: [PureRenderMixin],
+  mixins: [PureRenderMixin, TimerMixin],
   getInitialState() {
     return {
       countDown: 0,
     }
   },
 
-  getDefaultProps(){
-    return {
-      tipList: fromJS([{
-        name: "Kdot1",
-        tip: "test",
-      },{
-        name: "Kdot2",
-        tip: "test",
-      },{
-        name: "Kdot3",
-        tip: "test",
-      },{
-        name: "Kdot4",
-        tip: "test",
-      },{
-        name: "Kdot5",
-        tip: "test",
-      },{
-        name: "Kdot6",
-        tip: "test",
-      },{
-        name: "Kdot7",
-        tip: "test",
-      },{
-        name: "Kdot8",
-        tip: "test",
-      },{
-        name: "Kdot9",
-        tip: "test",
-      },{
-        name: "Kdot10",
-        tip: "test",
-      },{
-        name: "Kdot11",
-        tip: "test",
-      },{
-        name: "Kdot12",
-        tip: "test",
-      },{
-        name: "Kdot13",
-        tip: "test",
-      },{
-        name: "Kdot14",
-        tip: "test",
-      },{
-        name: "Kdot15",
-        tip: "test",
-      }])
-    }
-  },
-
   componentWillReceiveProps(nextProps) {
     if ((this.props.stage === 'PREPARE_STAGE' || !this.props.stage) && nextProps.stage === 'PLAYING_STAGE') {
       this._startCountDown(nextProps)
+      this._startPlayTipList(nextProps.player)
     }
+  },
+  _cursorPointer: 0,
+  _startPlayTipList(playerList) {
+    this.setTimeout(() => {
+      this.setInterval(() => {
+        this.refs[`item${this._cursorPointer++%playerList.size}`].runAnimation()
+      }, 2000)
+
+    }, 400)
   },
   _startCountDown(props) {
     const game = props.game
@@ -147,7 +110,7 @@ export const Management = React.createClass({
     this.setState({
       countDown: initialCountDown,
     })
-    TimerMixin.setInterval(() => {
+    this.setInterval(() => {
       this.setState({
         countDown: Math.max(this.state.countDown - 1, 0),
       })
@@ -155,7 +118,9 @@ export const Management = React.createClass({
   },
 
   handleStartGame(){
-    this.props.startGame();
+    if (this.props.stage === "PREPARE_STAGE") {
+      this.props.startGame()
+    }
   },
 
   // Render.
@@ -199,27 +164,35 @@ export const Management = React.createClass({
       stage,
       targetValue,
       clientId,
-      tipList,
+      player,
     } = this.props
-    const readyPlayer = this.props.player.toList().filter(v => v.get('isReady'))
+    const readyPlayer = player.toList().filter(v => v.get('isReady'))
+    const v = 20
+
     return (
       <div className={styles.tipContent}>
         {/* <div className={styles.shadeCover}></div> */}
         <div className={styles.tipContainer}>
           {
-            tipList.map((item,index)=>{
-              return (
-                <div style={{animationDelay: index*(tipList.size/15)+'s'}} key={index} className={styles.tip}>
-                  <Chip
-                    style={{height:'25px'}}
-                    labelStyle={{fontSize:'14px',lineHeight:'25px',textOverflow:'ellipsis'}}
-                  >
-                  <Avatar color="#444" style={{width:'25px',height:'25px'}}  icon={<SvgIconFace style={{height:'20px',width:'20px'}}/>} />
-                    {item.get('name')}
-                  </Chip>
-                  <span className={styles.tipDetail}>{item.get('tip')}</span>
-                </div>
+            player.toList().map((item, index)=>{
+              const ele = item.get('elements').find(v => !!v.get('tip'))
+
+              const velocity = (
+                <VelocityComponent key={index} ref={`item${index}`} animation={{top: [-60, 410]}} duration={470 * 1000 / v} easing={'linear'}>
+                  <div className={styles.tip} style={{top: 410}}>
+                    <Chip
+                      style={{height:'25px'}}
+                      labelStyle={{fontSize:'14px',lineHeight:'25px',textOverflow:'ellipsis'}}
+                    >
+                    <Avatar color="#444" style={{width:'25px',height:'25px'}}  icon={<SvgIconFace style={{height:'20px',width:'20px'}}/>} />
+                      {item.get('name')}
+                    </Chip>
+                    <span className={styles.tipDetail}>{`我有${ele.get('value')}, 代码是${ele.get('code')}`}</span>
+                  </div>
+                </VelocityComponent>
               )
+
+              return velocity
             })
           }
         </div>
@@ -258,7 +231,7 @@ export const Management = React.createClass({
         <div className={styles.prepareStageContainer}>
           {this.renderContent()}
           <div className={styles.footer} onTouchStart={this.handleStartGame} onClick={this.handleStartGame}>
-            开始
+            { this.props.stage === 'PREPARE_STAGE' ? "开始" : "进行中" }
           </div>
         </div>
         {/*<div className="management">

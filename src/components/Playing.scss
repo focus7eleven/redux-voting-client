@@ -4,6 +4,25 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    position: relative;
+    
+    :local(.labelGroup) {
+        position: absolute; 
+        top: 0;
+        width: 100%;
+
+        :local(.nameLabel) {
+            font-size: 20px;
+            text-align: center;
+        }
+
+        :local(.codeLabel) {
+            margin-top: 4px;
+            font-size: 12px;
+            text-align: center;
+            color: #d1d1d1;
+        }
+    }
 }
 
 :local(.expressionPanel) {
@@ -53,6 +72,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    flex-shrink: 0;
     padding: 3.125vh 0;
 
     >div:first-child {

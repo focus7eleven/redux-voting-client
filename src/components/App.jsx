@@ -5,7 +5,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 export default React.createClass({
   render: function() {
     return <MuiThemeProvider>
-	    <div style={{height: "100%",width: "100%"}}>
+	    <div style={{height: "100vh",width: "100vw"}}>
 			<ConnectionStateContainer />
 			{this.props.children}
 	    </div>

@@ -44,12 +44,9 @@ function clamp(n, min, max) {
 const [WIDTH, HEIGHT, RADIUS, DELETE_LIMIT] = [window.innerWidth, 200, 40, 50]
 const CODE_SET = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
-export const Playing = React.createClass({
-  propTypes: {
-    viewer: React.PropTypes.object,
-  },
-  mixins: [PureRenderMixin],
 
+const ExpressionPanel = React.createClass({
+  mixins: [PureRenderMixin],
   getInitialState() {
     this.updateLayout(this.props.viewer.get('elements'))
 
@@ -58,10 +55,6 @@ export const Playing = React.createClass({
       delta: [0, 0], // difference between mouse and circle pos, for dragging
       lastPress: null, // key of the last pressed component
       isPressed: false,
-
-      inputCodeValue: '',
-      targetValue: 0,
-      pressedKey: [],
     }
   },
   componentWillReceiveProps(nextProps) {
@@ -94,12 +87,6 @@ export const Playing = React.createClass({
     this._oy = oy
     this._radius = radius
     this._margin = margin
-  },
-  getKeyButton(code) {
-    return ['R', 'A', 'N', 'D', 'O', 'M']
-  },
-  getSign(v) {
-    return _.find(SLIDER_MARKERS, marker => marker.value === v).label
   },
 
   // Handler
@@ -146,34 +133,8 @@ export const Playing = React.createClass({
 
     this.setState({isPressed: false, delta: [0, 0]})
   },
-  handleChangeTarget(v) {
-    this.setState({
-      targetValue: v,
-    })
-    this.props.addAnotherElement(this.state.pressedKey, this.getSign(v))
-  },
-  handlePressKey(k, evt) {
-    evt.preventDefault()
-    evt.stopPropagation()
 
-    let pressedKey = this.state.pressedKey.slice()
-
-    if (~this.state.pressedKey.indexOf(k)) {
-      pressedKey = this.state.pressedKey.filter(v => v !== k)
-      this.setState({
-        pressedKey,
-      })
-    } else {
-      pressedKey.push(k)
-      this.setState({
-        pressedKey,
-      })
-    }
-    this.props.addAnotherElement(pressedKey, this.getSign(this.state.targetValue))
-  },
-
-  // Render.
-  renderExpression() {
+  render() {
     const {
       lastPress,
       isPressed,
@@ -235,15 +196,70 @@ export const Playing = React.createClass({
         })}
       </div>
     );
+  }
+})
+
+export const Playing = React.createClass({
+  propTypes: {
+    viewer: React.PropTypes.object,
   },
+  mixins: [PureRenderMixin],
+
+  getInitialState() {
+    return {
+      inputCodeValue: '',
+      targetValue: 0,
+      pressedKey: [],
+    }
+  },
+  getKeyButton(code) {
+    return ['R', 'A', 'N', 'D', 'O', 'M']
+  },
+  getSign(v) {
+    return _.find(SLIDER_MARKERS, marker => marker.value === v).label
+  },
+ 
+  handleChangeTarget(v) {
+    this.setState({
+      targetValue: v,
+    })
+    this.props.addAnotherElement(this.state.pressedKey, this.getSign(v))
+  },
+  handlePressKey(k, evt) {
+    evt.preventDefault()
+    evt.stopPropagation()
+
+    let pressedKey = this.state.pressedKey.slice()
+
+    if (~this.state.pressedKey.indexOf(k)) {
+      pressedKey = this.state.pressedKey.filter(v => v !== k)
+      this.setState({
+        pressedKey,
+      })
+    } else {
+      pressedKey.push(k)
+      this.setState({
+        pressedKey,
+      })
+    }
+    this.props.addAnotherElement(pressedKey, this.getSign(this.state.targetValue))
+  },
+
+  // Render.
   render() {
     const {
-      viewer
+      viewer,
+      players
     } = this.props
     const originalElement = viewer.get('elements').find(v => !!v.get('tip'))
 
     return <div className={styles.container}>
-      {this.renderExpression()}
+      <div className={styles.labelGroup}>
+        <div className={styles.nameLabel}>{viewer.get('name')}</div>
+        <div className={styles.codeLabel}>我的代码：123</div>
+      </div>
+
+      <ExpressionPanel {...this.props}></ExpressionPanel>
 
       <Paper className={styles.socialZone}>
         <Slider

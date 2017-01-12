@@ -47,6 +47,7 @@ export const Client = React.createClass({
 
     // Complete this game.
     if (this.props.viewer.get('value') == this.props.targetValue) {
+      console.log(this.props)
       content = <div>
         <div>恭喜!</div>
         <List>
