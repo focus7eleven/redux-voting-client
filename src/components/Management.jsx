@@ -217,6 +217,23 @@ export const Management = React.createClass({
         return null
     }
   },
+  renderRankList() {
+    // if(!this.props.result || !this.props.result.size) return null
+
+    // const rankList = this.props.result.map((v, k) => ({
+    //   assistantCount: this.props.player.delete(k).reduce((reduction, player) => player.get('elements').some(v => v.get('source') === k) ? reduction + 1 : reduction, 0),
+    //   time: v.get('timestamp') - this.props.game.get('startTime'),
+    // })).toList().map(v => v.set('score', -v.get('time') + v.get('assistantCount') * 20)).sort((a, b) => a.get('score') - b.get('score'))
+    // console.log(rankList.toJS())
+    // return <Paper className={styles.rankList}>
+    //   <div>1. 哈哈哈哈哈 获得 3 个红包。</div>
+    //   <div>2. 哈哈哈哈哈 获得 3 个红包。</div>
+    //   <div>3. 哈哈哈哈哈 获得 3 个红包。</div>
+    //   <div>4. 哈哈哈哈哈 获得 3 个红包。</div>
+    //   <div>5. 哈哈哈哈哈 获得 3 个红包。</div>
+    //   <div>6. 哈哈哈哈哈 获得 3 个红包。</div>
+    // </Paper>
+  },
   render() {
     return <div className={styles.management}>
       <div className={styles.prepareStage}>
@@ -249,6 +266,7 @@ function mapStateToProps(state) {
     player: state.get('player') || Map(),
     clientId: state.get('clientId'),
     game: state.get('game'),
+    result: state.get('result'),
   }
 }
 

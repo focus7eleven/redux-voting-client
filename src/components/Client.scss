@@ -1,73 +1,93 @@
 $PAPER_SIZE: 100vw * 0.35;
-$PAPER_MAX_SIZE: 100vh * 0.30;
+$PAPER_MAX_SIZE: 100vh * 0.3;
 
-.container{
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  padding-bottom: 2.125vh;
-  background-color: #fafafa;
-
-  >div:first-child{
+.container {
     width: 100%;
-    height: 30px;
+    height: 100%;
     display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
-    background-color: black;
-    color: white;
-    padding-left: 10px;
-    padding-right: 10px;
-    .notification{
-      font-size: 12px;
-      width: 100%;
+    padding-bottom: 2.125vh;
+    background-color: #fafafa;
+
+    > div:first-child {
+        width: 100%;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0);
+        color: white;
+        padding-left: 10px;
+        padding-right: 10px;
+
+        .notification {
+            font-size: 12px;
+            width: 100%;
+        }
     }
-  }
 
-  >div:nth-child(2){
-    width: 100%;
-    height: 31.25%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    > div:nth-child(2) {
+        width: 100%;
+        height: 31.25%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        flex-shrink: 0;
+    }
+
+    > div:nth-child(3) {
+        height: calc( 68.75% - 30px );
+        flex-shrink: 0;
+    }
+}
+
+.targetValueContainer {
+    height: $PAPER_SIZE;
+    width: $PAPER_SIZE;
+    max-width: $PAPER_MAX_SIZE;
+    max-height: $PAPER_MAX_SIZE;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    flex-shrink: 0;
-  }
 
-  >div:nth-child(3){
-    height: calc( 68.75% - 30px );
-    flex-shrink: 0;
-  }
+    > span:first-child {
+        color: #4a4a4a;
+        font-size: 7vh;
+    }
+
+    > span:nth-child(2) {
+        color: #4a4a4a;
+        padding-top: 3px;
+        font-size: 13px;
+    }
 }
 
-.targetValueContainer{
-  height: $PAPER_SIZE;
-  width: $PAPER_SIZE;
-  max-width: $PAPER_MAX_SIZE;
-  max-height: $PAPER_MAX_SIZE;
-  text-align: center;
-  display: inline-flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  >span:first-child{
-    color: #4a4a4a;
-    font-size: 7vh;
-  }
-  >span:nth-child(2){
-    color: #4a4a4a;
-    padding-top: 3px;
-    font-size: 13px;
-  }
+.footer {
+    color: #d9d9d9;
+    font-size: 12px;
+    width: calc( 100% - 60px );
+    text-align: center;
+    border-top: 1px solid #d9d9d9;
+    padding-top: 5px;
 }
 
-.footer{
-  color: #d9d9d9;
-  font-size: 12px;
-  width: calc( 100% - 60px );
-  text-align: center;
-  border-top: 1px solid #d9d9d9;
-  padding-top: 5px;
+.cong {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-size: 1em;
+
+    > div {
+        margin-bottom: .5vh;
+    }
+
+    > div:first-child {
+        font-size: 3em;
+    }
 }

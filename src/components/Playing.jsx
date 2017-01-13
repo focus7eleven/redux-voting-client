@@ -256,7 +256,7 @@ export const Playing = React.createClass({
     return <div className={styles.container}>
       <div className={styles.labelGroup}>
         <div className={styles.nameLabel}>{viewer.get('name')}</div>
-        <div className={styles.codeLabel}>我的代码：123</div>
+        <div className={styles.codeLabel}>我的代码：{originalElement.get('code')}</div>
       </div>
 
       <ExpressionPanel {...this.props}></ExpressionPanel>

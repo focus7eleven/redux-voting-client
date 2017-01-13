@@ -1,6 +1,9 @@
 import React from 'react'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import {
+  Map
+} from 'immutable'
+import {
   connect
 } from 'react-redux'
 import * as actionCreators from '../action_creators'
@@ -12,18 +15,20 @@ import PlayingContainer from './Playing'
 import AppBar from 'material-ui/AppBar'
 import {List, ListItem} from 'material-ui/List'
 
+const AVERAGE_COUNT = 5
+
 export const Client = React.createClass({
   mixins: [PureRenderMixin],
 
   componentWillMount() {
     this.props.joinGame()
 
-    if (this.props.viewer && !this.props.isComplete && this.props.viewer.get('value') == this.props.targetValue) {
+    if (this.props.viewer && !this.props.result && this.props.viewer.get('value') == this.props.targetValue) {
       this.props.signalComplete(Date.now())
     }
   },
   componentWillUpdate(nextProps, nextState) {
-    if (nextProps.viewer &&  this.props.viewer && !this.props.isComplete && nextProps.viewer.get('value') == this.props.targetValue) {
+    if (nextProps.viewer &&  this.props.viewer && !this.props.result && nextProps.viewer.get('value') == this.props.targetValue) {
       this.props.signalComplete(Date.now())
     }
   },
@@ -46,24 +51,47 @@ export const Client = React.createClass({
     }
 
     // Complete this game.
-    if (this.props.viewer.get('value') == this.props.targetValue) {
-      console.log(this.props)
-      content = <div>
+    if (!!this.props.result) {
+      // 分配奖金
+      let redpackCount = 0
+      const rankList = this.props.results.map((v, k) => Map({
+        assistantCount: this.props.player.delete(k).reduce((reduction, player) => player.get('elements').some(v => v.get('source') === k) ? reduction + 1 : reduction, 0),
+        time: v.get('timestamp') - this.props.game.get('startTime'),
+        clientId: k,
+      })).toList().map(v => v.set('score', -v.get('time') + v.get('assistantCount') * 20000)).sort((a, b) => b.get('score') - a.get('score'))
+      const rank = rankList.findIndex(v => v.get('clientId') === this.props.clientId)
+
+      const x = ~~(this.props.player.size * 0.3)
+      if(this.props.player.size < 3) {
+        redpackCount = AVERAGE_COUNT
+      } else if(rank < x) {
+        redpackCount = AVERAGE_COUNT + 1
+      } else if(rank >= this.props.player.size - x) {
+        redpackCount = AVERAGE_COUNT - 1
+      } else {
+        redpackCount = AVERAGE_COUNT
+      }
+      const isAllComplete = this.props.player.size  === this.props.results.size
+
+      content = <div className={styles.cong}>
         <div>恭喜!</div>
-        <List>
-          <ListItem primaryText="1. hahahh 在30秒内完成了游戏，并帮助了3人。"/>
-        </List>
+        <div>{this.props.viewer.get('name')}</div>
+        <div>在 {~~((this.props.result.get('timestamp') - this.props.game.get('startTime')) / 1000)}秒 内完成了游戏</div>
+        <div>并帮助了 {this.props.otherPlayer.reduce((reduction, player) => player.get('elements').some(v => v.get('source') === this.props.clientId) ? reduction + 1 : reduction , 0)} 人</div>
+        {!isAllComplete?<div>当所有人完成后预计获得 <span style={{color: "#b71122"}}>{redpackCount}个红包!</span></div>:<div>最终获得了 <span style={{color: "#b71122"}}>{redpackCount}个红包!</span></div>}
       </div>
     }
 
     return <div className={styles.container}>
-      <div>
-        <svg fill="#ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/>
-            <path d="M0 0h24v24H0z" fill="none"/>
-        </svg>
-        <marquee className={styles.notification} behavior="scroll" direction="left">长痔疮的东哥时至运来，获得了【特典】皮肤，真是羡煞旁人！</marquee>
-      </div>
+        <div>
+          {/*
+            <svg fill="#ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/>
+                <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+            <marquee className={styles.notification} behavior="scroll" direction="left">长痔疮的东哥时至运来，获得了【特典】皮肤，真是羡煞旁人！</marquee>
+          */}
+        </div>
 
       <div>
         <Paper className={styles.targetValueContainer} zDepth={3} circle={true}>
@@ -93,7 +121,12 @@ function mapStateToProps(state) {
     viewer: state.getIn(['player', clientId]),
     stage: state.get('stage'),
     targetValue: state.get('targetValue'),
-    isComplete: !!state.getIn(['result', clientId]),
+    result: state.getIn(['result', clientId]),
+    results: state.getIn(['result']),
+    otherPlayer: state.get('player', Map()).delete(clientId),
+    player: state.get('player'),
+    game: state.get('game'),
+    clientId,
   }
 }
 
