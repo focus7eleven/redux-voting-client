@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
+NODE_ENV: JSON.stringify("production")
 
 module.exports = {
   entry: [
@@ -39,7 +40,12 @@ module.exports = {
     hot: true
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      "process.env": {
+        NODE_ENV: JSON.stringify("production"),
+      }
+    }),
   ],
   postcss: function() {
     return [autoprefixer];

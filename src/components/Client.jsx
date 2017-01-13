@@ -72,11 +72,13 @@ export const Client = React.createClass({
         redpackCount = AVERAGE_COUNT
       }
       const isAllComplete = this.props.player.size  === this.props.results.size
+      const originalElement = this.props.viewer.get('elements').find(v => !!v.get('tip'))
 
       content = <div className={styles.cong}>
         <div>恭喜!</div>
-        <div>{this.props.viewer.get('name')}</div>
-        <div>在 {~~((this.props.result.get('timestamp') - this.props.game.get('startTime')) / 1000)}秒 内完成了游戏</div>
+        <div style={{fontSize: 20}}>{this.props.viewer.get('name')}</div>
+        <div style={{fontSize: 12, color: "#d1d1d1"}}>{originalElement.get('code')} - {originalElement.get('value')}</div>
+        <div style={{marginTop: 30}}>在 {~~((this.props.result.get('timestamp') - this.props.game.get('startTime')) / 1000)}秒 内完成了游戏</div>
         <div>并帮助了 {this.props.otherPlayer.reduce((reduction, player) => player.get('elements').some(v => v.get('source') === this.props.clientId) ? reduction + 1 : reduction , 0)} 人</div>
         {!isAllComplete?<div>当所有人完成后预计获得 <span style={{color: "#b71122"}}>{redpackCount}个红包!</span></div>:<div>最终获得了 <span style={{color: "#b71122"}}>{redpackCount}个红包!</span></div>}
       </div>
