@@ -15,7 +15,7 @@ import PlayingContainer from './Playing'
 import AppBar from 'material-ui/AppBar'
 import {List, ListItem} from 'material-ui/List'
 
-const AVERAGE_COUNT = 5
+const AVERAGE_COUNT = 4
 
 export const Client = React.createClass({
   mixins: [PureRenderMixin],
